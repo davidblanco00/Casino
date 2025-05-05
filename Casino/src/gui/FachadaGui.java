@@ -28,12 +28,15 @@ public class FachadaGui {
         VAutentificacion va;
 
         va = new VAutentificacion(vbv, true, fa);
-        vbv.setVisible(true);
         va.setVisible(true);
     }
     
     public void iniciaFachadaEmpleado(){
-        vpe = new VPrincipalE(fa);
+        vbv.setVisible(true);
+    }
+    
+    public void iniciaPrincipalEmpleado(){
+        vpe = new VPrincipalE(fa, this);
         vpe.setVisible(true);
     }
     

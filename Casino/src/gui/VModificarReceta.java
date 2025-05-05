@@ -41,7 +41,7 @@ public class VModificarReceta extends javax.swing.JDialog {
         jListNoDisponibleEn.setModel(modeloNoDisponible);
         jTableProductos.setModel(modeloProductos);
         jTextFieldNombre.setText(anterior.getNombre());
-        jTextFieldNombre.setText(Float.toString(anterior.getPrecio_venta()));
+        jTextFieldPrecio.setText(Float.toString(anterior.getPrecio_venta()));
         List<Bar> baresDisponible=fa.baresRecetaDisponible(anterior);
         modeloDisponible.setElementos(baresDisponible);
         List<Bar> baresNoDisponible=fa.baresRecetaNoDisponible(anterior);

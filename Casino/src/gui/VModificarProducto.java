@@ -26,6 +26,9 @@ public class VModificarProducto extends javax.swing.JDialog {
         centrarVentana(); 
         this.fa=fa;
         this.anterior=anterior;
+        jTextFieldNombre.setText(anterior.getNombre());
+        jTextFieldPrecio.setText(Float.toString(anterior.getPrecio_compra()));
+        jTextFieldStock.setText(Float.toString(anterior.getExistencias()));
     }
     
     private void centrarVentana() {

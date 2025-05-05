@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.ArrayList;
 import aplicacion.Receta;
 import aplicacion.Servicios;
+import gui.VPrincipalE;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -475,9 +476,9 @@ public class VEmRePrDeSe extends javax.swing.JDialog {
                 .addGroup(jPanelProductosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabelOrdenarPorProductos)
                     .addComponent(jComboBoxOrdenarPorProductos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonBuscarProductos))
+                    .addComponent(jButtonBuscarProductos, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPaneProductos, javax.swing.GroupLayout.DEFAULT_SIZE, 266, Short.MAX_VALUE)
+                .addComponent(jScrollPaneProductos, javax.swing.GroupLayout.DEFAULT_SIZE, 267, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanelProductosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonModificarProducto)
@@ -725,20 +726,27 @@ public class VEmRePrDeSe extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonBuscarRecetasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBuscarRecetasActionPerformed
-        // TODO add your handling code here:
-        try{
-            List<Receta> recetas=new ArrayList<Receta>();
-            if(jTextFieldPrecioRecetas.getText()!=""){
-                recetas=fa.buscarRecetas(jTextFieldNombreRecetas.getText(),Float.valueOf(jTextFieldPrecioRecetas.getText()),(String)jComboBoxOrdenarPorRecetas.getSelectedItem());
-            }
-            else{
-                recetas=fa.buscarRecetas(jTextFieldNombreRecetas.getText(),null,(String)jComboBoxOrdenarPorRecetas.getSelectedItem());
-            }
-            modeloRecetas.setFilas(recetas);
+        try {
+        List<Receta> recetas = new ArrayList<>();
+        
+        String nombre = jTextFieldNombreRecetas.getText();
+        String textoPrecio = jTextFieldPrecioRecetas.getText().trim();
+        Float precio = null;
+
+        // Solo convierte si hay un número válido
+        if (!textoPrecio.isEmpty()) {
+            precio = Float.parseFloat(textoPrecio);
         }
-        catch(Exception e){
-            fa.muestraExcepcion(e.getMessage());
-        }
+
+        String orden = (String) jComboBoxOrdenarPorRecetas.getSelectedItem();
+        recetas = fa.buscarRecetas(nombre, precio, orden);
+        modeloRecetas.setFilas(recetas);
+        
+    } catch (NumberFormatException e) {
+        fa.muestraExcepcion("El precio debe ser un número válido.");
+    } catch (Exception e) {
+        fa.muestraExcepcion(e.getMessage());
+    }
     }//GEN-LAST:event_jButtonBuscarRecetasActionPerformed
 
     private void jButtonBorrarRecetaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBorrarRecetaActionPerformed
@@ -749,6 +757,9 @@ public class VEmRePrDeSe extends javax.swing.JDialog {
     private void jButtonSalirRecetaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSalirRecetaActionPerformed
         // TODO add your handling code here:
         this.dispose();
+        VPrincipalE vpe;
+        vpe = new VPrincipalE(fa, fgui);
+        vpe.setVisible(true);
     }//GEN-LAST:event_jButtonSalirRecetaActionPerformed
 
     private void jButtonModificarEmpleadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonModificarEmpleadoActionPerformed
@@ -780,40 +791,58 @@ public class VEmRePrDeSe extends javax.swing.JDialog {
     private void jButtonSalirEmpleadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSalirEmpleadosActionPerformed
         // TODO add your handling code here:
         this.dispose();
+        VPrincipalE vpe;
+        vpe = new VPrincipalE(fa, fgui);
+        vpe.setVisible(true);
+                               
     }//GEN-LAST:event_jButtonSalirEmpleadosActionPerformed
 
     private void jButtonSalirProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSalirProductoActionPerformed
         // TODO add your handling code here:
+        // TODO add your handling code here:
         this.dispose();
+        VPrincipalE vpe;
+        vpe = new VPrincipalE(fa, fgui);
+        vpe.setVisible(true);
+                             
     }//GEN-LAST:event_jButtonSalirProductoActionPerformed
 
     private void jButtonSalirDecoracionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSalirDecoracionActionPerformed
-        // TODO add your handling code here:
         this.dispose();
+        VPrincipalE vpe;
+        vpe = new VPrincipalE(fa, fgui);
+        vpe.setVisible(true);
     }//GEN-LAST:event_jButtonSalirDecoracionActionPerformed
 
     private void jButtonSalirServicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSalirServicioActionPerformed
         VPrincipalE vc;
-        vc = new VPrincipalE(fa);
+        vc = new VPrincipalE(fa, fgui);
         vc.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButtonSalirServicioActionPerformed
 
     private void jButtonBuscarProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBuscarProductosActionPerformed
-        // TODO add your handling code here:
-        try{
-            List<Producto> productos=new ArrayList<Producto>();
-            if(jTextFieldPrecioProductos.getText()!=""){
-                productos=fa.buscarProductos(jTextFieldNombreProductos.getText(),Float.valueOf(jTextFieldPrecioProductos.getText()),(String)jComboBoxOrdenarPorProductos.getSelectedItem());
-            }
-            else{
-                productos=fa.buscarProductos(jTextFieldNombreProductos.getText(),null,(String)jComboBoxOrdenarPorProductos.getSelectedItem());
-            }
-            modeloProductos.setFilas(productos);
+        try {
+        List<Producto> productos = new ArrayList<>();
+        
+        String nombre = jTextFieldNombreProductos.getText();
+        String textoPrecio = jTextFieldPrecioProductos.getText().trim();
+        Float precio = null;
+
+        // Solo convierte si hay un número válido
+        if (!textoPrecio.isEmpty()) {
+            precio = Float.parseFloat(textoPrecio);
         }
-        catch(Exception e){
-            fa.muestraExcepcion(e.getMessage());
-        }
+
+        String orden = (String) jComboBoxOrdenarPorProductos.getSelectedItem();
+        productos = fa.buscarProductos(nombre, precio, orden);
+        modeloProductos.setFilas(productos);
+        
+    } catch (NumberFormatException e) {
+        fa.muestraExcepcion("El precio debe ser un número válido.");
+    } catch (Exception e) {
+        fa.muestraExcepcion(e.getMessage());
+    }
     }//GEN-LAST:event_jButtonBuscarProductosActionPerformed
 
     private void jButtonBuscarDecoracionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBuscarDecoracionesActionPerformed

@@ -17,6 +17,7 @@ public class Decoracion {
         this.tipo = tipo;
         this.modelo = modelo;
         this.estado = estado;
+        
     }
     
     public Decoracion(int id, String tipo, String modelo, String estado, String nombre_zona) {
@@ -58,6 +59,16 @@ public class Decoracion {
     public void setEstado(String estado) {
         this.estado = estado;
     }
+
+    public String getNombre_zona() {
+        return nombre_zona;
+    }
+
+    public void setNombre_zona(String nombre_zona) {
+        this.nombre_zona = nombre_zona;
+    }
+    
+    
     
     
 }

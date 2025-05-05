@@ -21,11 +21,16 @@ public class VPrincipalE extends javax.swing.JFrame {
      * @param modal
      * @param fa
      */
-    public VPrincipalE(FachadaAplicacion fa) {
+    public VPrincipalE(FachadaAplicacion fa, FachadaGui fgui) {
         initComponents();
         getContentPane().setBackground(Color.WHITE);
         this.fa=fa;
-        centrarVentana();        
+        this.fgui=fgui;
+        centrarVentana(); 
+
+        setEnabled(true);
+        setFocusable(true);
+        setFocusableWindowState(true);
     }
     
     private void centrarVentana() {
@@ -58,6 +63,8 @@ public class VPrincipalE extends javax.swing.JFrame {
         setIconImages(null);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        zonasButton.setBackground(new java.awt.Color(255, 255, 255));
+        zonasButton.setForeground(new java.awt.Color(255, 255, 255));
         zonasButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/zonas.png"))); // NOI18N
         zonasButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -66,6 +73,8 @@ public class VPrincipalE extends javax.swing.JFrame {
         });
         getContentPane().add(zonasButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(385, 90, 250, 240));
 
+        gestionButton.setBackground(new java.awt.Color(255, 255, 255));
+        gestionButton.setForeground(new java.awt.Color(255, 255, 255));
         gestionButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/gestion.png"))); // NOI18N
         gestionButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

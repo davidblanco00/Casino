@@ -40,6 +40,10 @@ public class FachadaAplicacion {
  public void iniciaFachadaEmpleado(){
      fgui.iniciaFachadaEmpleado();
  }
+ 
+ public void iniciaPrincipalEmpleado(){
+     fgui.iniciaPrincipalEmpleado();
+ }
 
  public void muestraExcepcion(String e){
      fgui.muestraExcepcion(e);

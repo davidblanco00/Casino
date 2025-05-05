@@ -59,7 +59,7 @@ public class DAODecoraciones extends AbstractDAO {
          rsDecoraciones=stmDecoraciones.executeQuery();
         while (rsDecoraciones.next())
         {
-            decoracionActual=new Decoracion(rsDecoraciones.getInt(1),rsDecoraciones.getString(2),rsDecoraciones.getString(3),rsDecoraciones.getString(4));
+            decoracionActual=new Decoracion(rsDecoraciones.getInt(1),rsDecoraciones.getString(2),rsDecoraciones.getString(3),rsDecoraciones.getString(4), rsDecoraciones.getString(5));
             resultado.add(decoracionActual);
         }
 

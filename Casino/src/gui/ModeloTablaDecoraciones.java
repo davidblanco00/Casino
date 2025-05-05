@@ -16,7 +16,7 @@ public class ModeloTablaDecoraciones extends AbstractTableModel{
     
     @Override
     public int getColumnCount (){
-        return 4;
+        return 5;
     }
     
     @Override
@@ -33,6 +33,7 @@ public class ModeloTablaDecoraciones extends AbstractTableModel{
             case 1: nombre= "Tipo"; break;
             case 2: nombre= "Modelo"; break;
             case 3: nombre= "Estado"; break;
+            case 4: nombre= "Zona"; break;
         }
         return nombre;
     }
@@ -45,6 +46,8 @@ public class ModeloTablaDecoraciones extends AbstractTableModel{
             case 0: clase= Integer.class; break;
             case 1: clase= java.lang.String.class; break;
             case 2: clase= java.lang.String.class; break;
+            case 3: clase= java.lang.String.class; break;
+            case 4: clase= java.lang.String.class; break;
         }
         return clase;
     }
@@ -63,6 +66,7 @@ public class ModeloTablaDecoraciones extends AbstractTableModel{
             case 1: resultado=decoraciones.get(row).getTipo(); break;
             case 2: resultado=decoraciones.get(row).getModelo(); break;
             case 3: resultado=decoraciones.get(row).getEstado(); break;
+            case 4: resultado=decoraciones.get(row).getNombre_zona(); break;
         }
         
         return resultado;

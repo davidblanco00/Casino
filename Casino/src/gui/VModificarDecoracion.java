@@ -26,6 +26,10 @@ public class VModificarDecoracion extends javax.swing.JDialog {
         centrarVentana(); 
         this.fa=fa;
         this.anterior=anterior;
+        jTextFieldTipo.setText(anterior.getTipo());
+        jTextFieldModelo.setText(anterior.getModelo());
+        jTextFieldEstado.setText(anterior.getEstado());
+        jTextFieldZona.setText(anterior.getNombre_zona());
     }
 
     

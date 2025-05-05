@@ -46,6 +46,10 @@ public class VModificarEmpleado extends javax.swing.JDialog {
         else jButtonFlechaD.setEnabled(true);
         if (modeloNoTrabaja.getSize()==0) jButtonFlechaI.setEnabled(false);
         else jButtonFlechaI.setEnabled(true);
+        jTextFieldDNI.setText(anterior.getDni());
+        jTextFieldNombre.setText(anterior.getNombre());
+        jTextFieldRol.setText(anterior.getRol());
+        jTextFieldContrasenha.setText(anterior.getContrasenha());
     }
     
     private void centrarVentana() {

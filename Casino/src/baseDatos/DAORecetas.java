@@ -31,30 +31,48 @@ public class DAORecetas extends AbstractDAO {
 
         con=this.getConexion();
         
-        String consulta = "select nombre,precio_venta " +
-                                         "from Receta as r "+
-                                         "where nombre like ? ";
-        if(precio!=null){
-            consulta=consulta+"and precio_venta=? ";
+        String consulta = "SELECT nombre, precio_venta FROM Receta";
+        boolean tieneCondicion = false;
+
+        if (nombre != null && !nombre.isEmpty()) {
+            consulta += " WHERE nombre = ?";
+            tieneCondicion = true;
         }
-        if(ordenarPor.equals("Orden alfabético (ascendente)")){
-            consulta=consulta+"order by nombre asc ";
+
+        if (precio != null && !precio.toString().isEmpty()) {
+            if (tieneCondicion) {
+                consulta += " AND precio_venta = ?";
+            } else {
+                consulta += " WHERE precio_venta = ?";
+                tieneCondicion = true;
+            }
         }
-        if(ordenarPor.equals("Orden alfabético (descendente)")){
-            consulta=consulta+"order by nombre desc ";
+        if(ordenarPor.equals(" Orden alfabético (ascendente)")){
+            consulta=consulta+" order by nombre asc ";
         }
-        if(ordenarPor.equals("Precio (ascendente)")){
-            consulta=consulta+"order by precio_venta asc ";
+        if(ordenarPor.equals(" Orden alfabético (descendente)")){
+            consulta=consulta+" order by nombre desc ";
         }
-        if(ordenarPor.equals("Precio (descendente)")){
-            consulta=consulta+"order by precio_venta desc ";
+        if(ordenarPor.equals(" Precio (ascendente)")){
+            consulta=consulta+" order by precio_venta asc ";
+        }
+        if(ordenarPor.equals(" Precio (descendente)")){
+            consulta=consulta+" order by precio_venta desc ";
         }
         try  {
          stmRecetas=con.prepareStatement(consulta);
-         stmRecetas.setString(1, "%"+nombre+"%");
-         if(precio!=null){
-             stmRecetas.setFloat(2, precio);
-         }
+         
+         if (nombre != null && !nombre.isEmpty()) {
+            stmRecetas.setString(1, "%"+nombre+"%");
+        }
+
+        if (precio != null && !precio.toString().isEmpty()) {
+            if (tieneCondicion) {
+                stmRecetas.setFloat(2, precio);
+            } else {
+                stmRecetas.setFloat(1, precio);
+            }
+        }
          rsRecetas=stmRecetas.executeQuery();
         while (rsRecetas.next())
         {
@@ -110,7 +128,7 @@ public class DAORecetas extends AbstractDAO {
 
         con=this.getConexion();
         
-        query = "select Bar.nombre, Bar.id "+
+        query = "select Bar.nombre_zona, Bar.id "+
                 "from  Bar "+
                 "where Bar.id in ( "
                 + "select bar_receta.bar "
@@ -145,7 +163,7 @@ public class DAORecetas extends AbstractDAO {
 
         con=this.getConexion();
         
-        query = "select Bar.nombre, Bar.id "+
+        query = "select Bar.nombre_zona, Bar.id "+
                 "from  Bar "+
                 "where not Bar.id in ( "
                 + "select bar_receta.bar "
@@ -188,7 +206,7 @@ public class DAORecetas extends AbstractDAO {
         rsProductos=stmProductos.executeQuery();
         while (rsProductos.next())
         {
-            resultado.add(new Producto(rsProductos.getString(1),rsProductos.getInt(1),rsProductos.getFloat(3)));
+            resultado.add(new Producto(rsProductos.getString(1),rsProductos.getInt(2),rsProductos.getFloat(3)));
 
         }
         } catch (SQLException e){
@@ -324,7 +342,7 @@ public class DAORecetas extends AbstractDAO {
 
         con=this.getConexion();
         
-        query = "select Bar.nombre, Bar.id "+
+        query = "select Bar.nombre_zona, Bar.id "+
                 "from  Bar ";
 
         try {

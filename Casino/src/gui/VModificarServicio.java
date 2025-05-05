@@ -43,6 +43,8 @@ public class VModificarServicio extends javax.swing.JDialog {
         else jButtonFlechaD.setEnabled(true);
         if (modeloNoDisponible.getSize()==0) jButtonFlechaI.setEnabled(false);
         else jButtonFlechaI.setEnabled(true);
+        jTextFieldNombre.setText(anterior.getNombre());
+        jEditorPaneDescripcion.setText(anterior.getDescripcion());
     }
     
     private void centrarVentana() {
