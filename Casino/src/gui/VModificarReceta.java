@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.util.List;
+import javax.swing.JFrame;
 
 /**
  *
@@ -140,6 +141,11 @@ public class VModificarReceta extends javax.swing.JDialog {
         });
 
         jTableProductos.setModel(new ModeloTablaProductosReceta());
+        jTableProductos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTableProductosMouseClicked(evt);
+            }
+        });
         jScrollPaneProductos.setViewportView(jTableProductos);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -255,6 +261,13 @@ public class VModificarReceta extends javax.swing.JDialog {
         fa.modificarReceta(nueva,modeloDisponible.getElementos(),modeloProductos.getProductos(),modeloProductos.getCantidades());
         this.dispose();
     }//GEN-LAST:event_jButtonAceptarActionPerformed
+
+    private void jTableProductosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableProductosMouseClicked
+        if(jTableProductos.getSelectedColumn()==1){
+            VCantidad v= new VCantidad((JFrame) this.getParent(),true,modeloProductos,modeloProductos.getCantidades(), jTableProductos.getSelectedRow());
+            v.setVisible(true);
+        }
+    }//GEN-LAST:event_jTableProductosMouseClicked
 
     /**
      * @param args the command line arguments

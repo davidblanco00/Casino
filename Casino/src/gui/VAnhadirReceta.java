@@ -5,6 +5,7 @@ import aplicacion.Bar;
 import aplicacion.Producto;
 import aplicacion.FachadaAplicacion;
 import aplicacion.Receta;
+import aplicacion.Zonas;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -12,6 +13,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Set;
+import javax.swing.JFrame;
 
 /**
  *
@@ -134,6 +136,11 @@ public class VAnhadirReceta extends javax.swing.JDialog {
         });
 
         jTableProductos.setModel(new ModeloTablaProductosReceta());
+        jTableProductos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTableProductosMouseClicked(evt);
+            }
+        });
         jScrollPaneProductos.setViewportView(jTableProductos);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -250,7 +257,13 @@ public class VAnhadirReceta extends javax.swing.JDialog {
         jButtonFlechaD.setEnabled(true);
     }//GEN-LAST:event_jButtonFlechaIActionPerformed
 
-   
+    private void jTableProductosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableProductosMouseClicked
+        if(jTableProductos.getSelectedColumn()==1){
+            VCantidad v= new VCantidad((JFrame) this.getParent(),true,modeloProductos,modeloProductos.getCantidades(), jTableProductos.getSelectedRow());
+            v.setVisible(true);
+        }
+    }//GEN-LAST:event_jTableProductosMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAceptar;

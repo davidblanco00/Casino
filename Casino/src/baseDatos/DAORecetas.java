@@ -107,6 +107,17 @@ public class DAORecetas extends AbstractDAO {
           try {stmReceta.close();} catch (SQLException e){System.out.println("Imposible cerrar cursores");}
         }
         try {
+        stmReceta=con.prepareStatement("delete from bar_receta where bar_receta.receta = ?");
+        stmReceta.setString(1, r.getNombre());
+        stmReceta.executeUpdate();
+
+        } catch (SQLException e){
+          System.out.println(e.getMessage());
+          this.getFachadaAplicacion().muestraExcepcion(e.getMessage());
+        }finally{
+          try {stmReceta.close();} catch (SQLException e){System.out.println("Imposible cerrar cursores");}
+        }
+        try {
         stmReceta=con.prepareStatement("delete from Receta where Receta.nombre = ?");
         stmReceta.setString(1, r.getNombre());
         stmReceta.executeUpdate();
@@ -306,6 +317,7 @@ public class DAORecetas extends AbstractDAO {
                                         "values(?,?) ");
                 stmReceta.setInt(1, bares.get(i).getId());
                 stmReceta.setString(2, receta.getNombre());
+                stmReceta.executeUpdate();
             }catch (SQLException e){
                 System.out.println(e.getMessage());
                 this.getFachadaAplicacion().muestraExcepcion(e.getMessage());
@@ -318,10 +330,11 @@ public class DAORecetas extends AbstractDAO {
             if(cantidades.get(i)>0.0f){
                 try{
                     stmReceta=con.prepareStatement("insert into utilizar_receta(nombre_producto,nombre_receta,cantidad) "+
-                                            "values(?,?) ");
+                                            "values(?,?,?) ");
                     stmReceta.setString(1, productos.get(i).getNombre());
                     stmReceta.setString(2, receta.getNombre());
                     stmReceta.setFloat(3, cantidades.get(i));
+                    stmReceta.executeUpdate();
                 }catch (SQLException e){
                     System.out.println(e.getMessage());
                     this.getFachadaAplicacion().muestraExcepcion(e.getMessage());
@@ -371,6 +384,7 @@ public class DAORecetas extends AbstractDAO {
         int nproductos=productos.size();
         int i;
 
+
         con=super.getConexion();
 
         try {
@@ -394,6 +408,7 @@ public class DAORecetas extends AbstractDAO {
                                         "values(?,?) ");
                 stmReceta.setInt(1, bares.get(i).getId());
                 stmReceta.setString(2, receta.getNombre());
+                stmReceta.executeUpdate();
             }catch (SQLException e){
                 System.out.println(e.getMessage());
                 this.getFachadaAplicacion().muestraExcepcion(e.getMessage());
@@ -406,10 +421,11 @@ public class DAORecetas extends AbstractDAO {
             if(cantidades.get(i)>0.0f){
                 try{
                     stmReceta=con.prepareStatement("insert into utilizar_receta(nombre_producto,nombre_receta,cantidad) "+
-                                            "values(?,?) ");
+                                            "values(?,?,?) ");
                     stmReceta.setString(1, productos.get(i).getNombre());
                     stmReceta.setString(2, receta.getNombre());
                     stmReceta.setFloat(3, cantidades.get(i));
+                    stmReceta.executeUpdate();
                 }catch (SQLException e){
                     System.out.println(e.getMessage());
                     this.getFachadaAplicacion().muestraExcepcion(e.getMessage());
