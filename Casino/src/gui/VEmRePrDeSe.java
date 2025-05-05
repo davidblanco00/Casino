@@ -9,6 +9,9 @@ import java.util.List;
 import java.util.ArrayList;
 import aplicacion.Receta;
 import aplicacion.Servicios;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import javax.swing.JFrame;
 
 
@@ -34,6 +37,8 @@ public class VEmRePrDeSe extends javax.swing.JDialog {
     public VEmRePrDeSe(java.awt.Frame parent, boolean modal,FachadaAplicacion fa,FachadaGui fgui) {
         super(parent, modal);
         initComponents();
+        getContentPane().setBackground(Color.WHITE);
+        centrarVentana(); 
         this.fa=fa;
         this.fgui=fgui;
         ModeloTablaRecetas modeloRecetas=new ModeloTablaRecetas();
@@ -51,6 +56,14 @@ public class VEmRePrDeSe extends javax.swing.JDialog {
         ModeloTablaServicios modeloServicios=new ModeloTablaServicios();
         jTableServicios.setModel(modeloServicios);
         this.modeloServicios=modeloServicios;
+    }
+    
+    private void centrarVentana() {
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        Dimension frameSize = this.getSize();
+        int x = (screenSize.width - frameSize.width) / 2;
+        int y = (screenSize.height - frameSize.height) / 2;
+        this.setLocation(x, y);
     }
 
     /**

@@ -3,6 +3,9 @@ package gui;
 
 import aplicacion.Decoracion;
 import aplicacion.FachadaAplicacion;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 
 /**
  *
@@ -19,10 +22,20 @@ public class VModificarDecoracion extends javax.swing.JDialog {
     public VModificarDecoracion(java.awt.Frame parent, boolean modal,FachadaAplicacion fa,Decoracion anterior) {
         super(parent, modal);
         initComponents();
+        getContentPane().setBackground(Color.WHITE);
+        centrarVentana(); 
         this.fa=fa;
         this.anterior=anterior;
     }
 
+    
+    private void centrarVentana() {
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        Dimension frameSize = this.getSize();
+        int x = (screenSize.width - frameSize.width) / 2;
+        int y = (screenSize.height - frameSize.height) / 2;
+        this.setLocation(x, y);
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

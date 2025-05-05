@@ -3,6 +3,9 @@
 package gui;
 
 import aplicacion.Empleado;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 
 /**
  *
@@ -17,6 +20,8 @@ public class VAutentificacion extends javax.swing.JDialog {
         super(parent, modal);
         this.fa=fa;
         initComponents();
+        getContentPane().setBackground(Color.WHITE);
+        centrarVentana(); 
         autenErrorU.setVisible(false);
         autenErrorA.setVisible(false);
         this.addWindowListener(new java.awt.event.WindowAdapter() {
@@ -27,6 +32,13 @@ public class VAutentificacion extends javax.swing.JDialog {
                 });
     }
 
+    private void centrarVentana() {
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        Dimension frameSize = this.getSize();
+        int x = (screenSize.width - frameSize.width) / 2;
+        int y = (screenSize.height - frameSize.height) / 2;
+        this.setLocation(x, y);
+    }
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is

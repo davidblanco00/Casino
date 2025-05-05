@@ -5,6 +5,9 @@ package gui;
 import aplicacion.FachadaAplicacion;
 import aplicacion.Servicios;
 import aplicacion.Zonas;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.util.List;
 
 /**
@@ -24,6 +27,8 @@ public class VModificarServicio extends javax.swing.JDialog {
     public VModificarServicio(java.awt.Frame parent, boolean modal, FachadaAplicacion fa, Servicios anterior) {
         super(parent, modal);
         initComponents();
+        getContentPane().setBackground(Color.WHITE);
+        centrarVentana(); 
         this.fa=fa;
         this.anterior=anterior;
         this.modeloDisponible=new ModeloListaZonas();
@@ -38,6 +43,14 @@ public class VModificarServicio extends javax.swing.JDialog {
         else jButtonFlechaD.setEnabled(true);
         if (modeloNoDisponible.getSize()==0) jButtonFlechaI.setEnabled(false);
         else jButtonFlechaI.setEnabled(true);
+    }
+    
+    private void centrarVentana() {
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        Dimension frameSize = this.getSize();
+        int x = (screenSize.width - frameSize.width) / 2;
+        int y = (screenSize.height - frameSize.height) / 2;
+        this.setLocation(x, y);
     }
 
     /**

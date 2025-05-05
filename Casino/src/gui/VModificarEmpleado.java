@@ -5,6 +5,8 @@ import aplicacion.Empleado;
 import aplicacion.FachadaAplicacion;
 import aplicacion.Zonas;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.util.List;
 
 /**
@@ -30,6 +32,7 @@ public class VModificarEmpleado extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         getContentPane().setBackground(Color.WHITE);
+        centrarVentana(); 
         this.anterior=anterior;
         this.modeloTrabaja=new ModeloListaZonas();
         this.modeloNoTrabaja=new ModeloListaZonas();
@@ -43,6 +46,14 @@ public class VModificarEmpleado extends javax.swing.JDialog {
         else jButtonFlechaD.setEnabled(true);
         if (modeloNoTrabaja.getSize()==0) jButtonFlechaI.setEnabled(false);
         else jButtonFlechaI.setEnabled(true);
+    }
+    
+    private void centrarVentana() {
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        Dimension frameSize = this.getSize();
+        int x = (screenSize.width - frameSize.width) / 2;
+        int y = (screenSize.height - frameSize.height) / 2;
+        this.setLocation(x, y);
     }
 
     /**

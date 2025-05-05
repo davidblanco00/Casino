@@ -5,6 +5,9 @@ import aplicacion.Receta;
 import aplicacion.Bar;
 import aplicacion.Producto;
 import aplicacion.FachadaAplicacion;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.util.List;
 
 /**
@@ -27,6 +30,8 @@ public class VModificarReceta extends javax.swing.JDialog {
     public VModificarReceta(java.awt.Frame parent, boolean modal,FachadaAplicacion fa, Receta anterior) {
         super(parent, modal);
         initComponents();
+        getContentPane().setBackground(Color.WHITE);
+        centrarVentana(); 
         this.fa=fa;
         this.anterior=anterior;
         this.modeloDisponible=new ModeloListaBares();
@@ -48,6 +53,14 @@ public class VModificarReceta extends javax.swing.JDialog {
         List<Producto> productos=fa.todosLosProductos();
         List<Float> cantidades=fa.emparejarCantidadesProductos(anterior,productos);
         modeloProductos.setFilas(productos,cantidades);
+    }
+    
+    private void centrarVentana() {
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        Dimension frameSize = this.getSize();
+        int x = (screenSize.width - frameSize.width) / 2;
+        int y = (screenSize.height - frameSize.height) / 2;
+        this.setLocation(x, y);
     }
 
     /**

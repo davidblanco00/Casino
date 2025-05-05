@@ -32,7 +32,7 @@ public class DAOEmpleados extends AbstractDAO{
         con=this.getConexion();
         
         query = "select dni, nombre, rol, contrasenha "+
-                "from empleado "+
+                "from empleados "+
                 "where nombre = '"+nombre+"' and contrasenha = '"+contrasenha+"' ";
 
         try {

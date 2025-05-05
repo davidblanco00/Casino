@@ -54,13 +54,12 @@ public class VBienvenida extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Bienvenida");
-        getContentPane().setLayout(null);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel2.setFont(new java.awt.Font("sansserif", 0, 24)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(153, 255, 153));
         jLabel2.setText("Bienvenid@ a la aplicación Casino");
-        getContentPane().add(jLabel2);
-        jLabel2.setBounds(80, 390, 456, 81);
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 390, 456, 81));
 
         jLabel1.setFont(new java.awt.Font("sansserif", 0, 24)); // NOI18N
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/fondo.png"))); // NOI18N
@@ -69,8 +68,7 @@ public class VBienvenida extends javax.swing.JFrame {
                 jLabel1MouseClicked(evt);
             }
         });
-        getContentPane().add(jLabel1);
-        jLabel1.setBounds(0, 0, 533, 450);
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 450));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -84,7 +82,7 @@ public class VBienvenida extends javax.swing.JFrame {
 
     private void enterKeyPressed(java.awt.event.KeyEvent evt) {                                       
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            jLabel1MouseClicked(null); // Llama al método btnAceptarActionPerformed al presionar Enter
+            jLabel1MouseClicked(null);
         }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables

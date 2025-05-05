@@ -56,7 +56,7 @@ public class VPrincipalE extends javax.swing.JFrame {
         setFocusable(false);
         setFocusableWindowState(false);
         setIconImages(null);
-        getContentPane().setLayout(null);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         zonasButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/zonas.png"))); // NOI18N
         zonasButton.addActionListener(new java.awt.event.ActionListener() {
@@ -64,8 +64,7 @@ public class VPrincipalE extends javax.swing.JFrame {
                 zonasButtonActionPerformed(evt);
             }
         });
-        getContentPane().add(zonasButton);
-        zonasButton.setBounds(385, 90, 250, 240);
+        getContentPane().add(zonasButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(385, 90, 250, 240));
 
         gestionButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/gestion.png"))); // NOI18N
         gestionButton.addActionListener(new java.awt.event.ActionListener() {
@@ -73,8 +72,7 @@ public class VPrincipalE extends javax.swing.JFrame {
                 gestionButtonActionPerformed(evt);
             }
         });
-        getContentPane().add(gestionButton);
-        gestionButton.setBounds(30, 90, 250, 250);
+        getContentPane().add(gestionButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 90, 250, 250));
 
         salirButton.setText("Salir");
         salirButton.addActionListener(new java.awt.event.ActionListener() {
@@ -82,13 +80,11 @@ public class VPrincipalE extends javax.swing.JFrame {
                 salirButtonActionPerformed(evt);
             }
         });
-        getContentPane().add(salirButton);
-        salirButton.setBounds(580, 370, 72, 23);
+        getContentPane().add(salirButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 370, -1, -1));
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/fondo.png"))); // NOI18N
-        getContentPane().add(jLabel1);
-        jLabel1.setBounds(0, 0, 670, 410);
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 670, 410));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents

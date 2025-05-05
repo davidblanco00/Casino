@@ -3,6 +3,9 @@ package gui;
 
 import aplicacion.Decoracion;
 import aplicacion.FachadaAplicacion;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 
 /**
  *
@@ -18,7 +21,17 @@ public class VAnhadirDecoracion extends javax.swing.JDialog {
     public VAnhadirDecoracion(java.awt.Frame parent, boolean modal,FachadaAplicacion fa) {
         super(parent, modal);
         initComponents();
+        getContentPane().setBackground(Color.WHITE);
+        centrarVentana(); 
         this.fa=fa;
+    }
+    
+    private void centrarVentana() {
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        Dimension frameSize = this.getSize();
+        int x = (screenSize.width - frameSize.width) / 2;
+        int y = (screenSize.height - frameSize.height) / 2;
+        this.setLocation(x, y);
     }
 
     /**
