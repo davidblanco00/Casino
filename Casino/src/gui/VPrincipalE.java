@@ -4,6 +4,7 @@
  */
 package gui;
 
+import aplicacion.FachadaAplicacion;
 import aplicacion.Zonas;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -16,12 +17,17 @@ import java.awt.Toolkit;
 public class VPrincipalE extends javax.swing.JFrame {
 
     aplicacion.FachadaAplicacion fa;
+    FachadaGui fgui;
     /**
      * Creates new form VPrincipalE
+     * @param parent
+     * @param modal
+     * @param fa
      */
-    public VPrincipalE() {
+    public VPrincipalE(FachadaAplicacion fa) {
         initComponents();
         getContentPane().setBackground(Color.WHITE);
+        this.fa=fa;
         centrarVentana();        
     }
     
@@ -42,111 +48,78 @@ public class VPrincipalE extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        panelEmpleados = new javax.swing.JPanel();
         zonasButton = new javax.swing.JButton();
-        juegosButton = new javax.swing.JButton();
-        desplegableButton = new javax.swing.JButton();
+        gestionButton = new javax.swing.JButton();
+        salirButton = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Principal Empleado");
         setEnabled(false);
         setFocusable(false);
         setFocusableWindowState(false);
         setIconImages(null);
         getContentPane().setLayout(null);
 
-        panelEmpleados.setBackground(new java.awt.Color(255, 255, 255));
-
-        zonasButton.setText("Zonas");
+        zonasButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/zonas.png"))); // NOI18N
         zonasButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 zonasButtonActionPerformed(evt);
             }
         });
+        getContentPane().add(zonasButton);
+        zonasButton.setBounds(385, 90, 250, 240);
 
-        juegosButton.setText("Juegos");
-        juegosButton.addActionListener(new java.awt.event.ActionListener() {
+        gestionButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/gestion.png"))); // NOI18N
+        gestionButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                juegosButtonActionPerformed(evt);
+                gestionButtonActionPerformed(evt);
             }
         });
+        getContentPane().add(gestionButton);
+        gestionButton.setBounds(30, 90, 250, 250);
 
-        javax.swing.GroupLayout panelEmpleadosLayout = new javax.swing.GroupLayout(panelEmpleados);
-        panelEmpleados.setLayout(panelEmpleadosLayout);
-        panelEmpleadosLayout.setHorizontalGroup(
-            panelEmpleadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelEmpleadosLayout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addComponent(juegosButton)
-                .addGap(18, 18, 18)
-                .addComponent(zonasButton)
-                .addContainerGap(433, Short.MAX_VALUE))
-        );
-        panelEmpleadosLayout.setVerticalGroup(
-            panelEmpleadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelEmpleadosLayout.createSequentialGroup()
-                .addContainerGap(11, Short.MAX_VALUE)
-                .addGroup(panelEmpleadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(juegosButton)
-                    .addComponent(zonasButton))
-                .addContainerGap())
-        );
-
-        getContentPane().add(panelEmpleados);
-        panelEmpleados.setBounds(52, 6, 613, 40);
-
-        desplegableButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/barras.jpg"))); // NOI18N
-        desplegableButton.setMaximumSize(new java.awt.Dimension(40, 40));
-        desplegableButton.setMinimumSize(new java.awt.Dimension(40, 40));
-        desplegableButton.setPreferredSize(new java.awt.Dimension(40, 40));
-        desplegableButton.addActionListener(new java.awt.event.ActionListener() {
+        salirButton.setText("Salir");
+        salirButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                desplegableButtonActionPerformed(evt);
+                salirButtonActionPerformed(evt);
             }
         });
-        getContentPane().add(desplegableButton);
-        desplegableButton.setBounds(6, 6, 40, 40);
+        getContentPane().add(salirButton);
+        salirButton.setBounds(580, 370, 72, 23);
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/fondo.png"))); // NOI18N
         getContentPane().add(jLabel1);
-        jLabel1.setBounds(6, 52, 660, 420);
+        jLabel1.setBounds(0, 0, 670, 410);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void zonasButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_zonasButtonActionPerformed
-        // TODO add your handling code here:
-        java.util.List<Zonas> zonas = fa.consultarZonas(null);
         VZonas vc;
-        vc = new VZonas(this, true, fa, zonas);
+        vc = new VZonas(this, true, fa);
         vc.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_zonasButtonActionPerformed
 
-    private void juegosButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_juegosButtonActionPerformed
+    private void gestionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gestionButtonActionPerformed
+        VEmRePrDeSe vc;
+        vc = new VEmRePrDeSe(this, true, fa, fgui);
+        vc.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_gestionButtonActionPerformed
 
-        
-        
-    }//GEN-LAST:event_juegosButtonActionPerformed
-
-    private void desplegableButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_desplegableButtonActionPerformed
-        // TODO add your handling code here:
-        if (panelEmpleados.isVisible()) {
-            // Si está visible, lo hacemos invisible
-            panelEmpleados.setVisible(false);
-        } else {
-            // Si no está visible, lo hacemos visible
-            panelEmpleados.setVisible(true);
-        }
-    }//GEN-LAST:event_desplegableButtonActionPerformed
+    private void salirButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_salirButtonActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_salirButtonActionPerformed
 
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton desplegableButton;
+    private javax.swing.JButton gestionButton;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JButton juegosButton;
-    private javax.swing.JPanel panelEmpleados;
+    private javax.swing.JButton salirButton;
     private javax.swing.JButton zonasButton;
     // End of variables declaration//GEN-END:variables
 }

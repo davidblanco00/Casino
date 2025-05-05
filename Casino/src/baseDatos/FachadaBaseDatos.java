@@ -5,27 +5,19 @@
 
 package baseDatos;
 
-import aplicacion.Apuesta;
-import aplicacion.Competitivo;
+import aplicacion.Bar;
+import aplicacion.Decoracion;
 import aplicacion.Empleado;
-import aplicacion.Ficha;
-import aplicacion.FichasDeUsuario;
-import aplicacion.Juego;
-import aplicacion.Maquina;
-import aplicacion.Mecanico;
-import aplicacion.Parte;
-import aplicacion.TipoJuego;
-import aplicacion.Usuario;
+import aplicacion.Producto;
+import aplicacion.Receta;
+import aplicacion.Servicios;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
+import aplicacion.Zonas;
 
 /**
  *
@@ -34,13 +26,12 @@ import java.util.Properties;
 public class FachadaBaseDatos {
     private aplicacion.FachadaAplicacion fa;
     private java.sql.Connection conexion;
-    private DAOUsuarios daoUsuarios;
     private DAOEmpleados daoEmpleados;
-    private DAOFichas daoFichas;
-    private DAOJuegos daoJuegos;
-    private DAOApuestas daoApuestas;
-    private DAOMaquinas daoMaquinas;
-    private DAOPartes daoPartes;
+    private DAOZonas daoZonas;
+    private DAORecetas daoRecetas;
+    private DAOProductos daoProductos;
+    private DAODecoraciones daoDecoraciones;
+    private DAOServicios daoServicios;
 
     public FachadaBaseDatos (aplicacion.FachadaAplicacion fa){
         
@@ -74,13 +65,12 @@ public class FachadaBaseDatos {
                     configuracion.getProperty("baseDatos"),
                     usuario);
             
-            this.daoUsuarios = new DAOUsuarios(conexion, fa);
             this.daoEmpleados = new DAOEmpleados(conexion, fa);
-            this.daoFichas = new DAOFichas(conexion, fa);
-            this.daoJuegos = new DAOJuegos(conexion, fa);
-            this.daoApuestas = new DAOApuestas(conexion, fa);
-            this.daoMaquinas = new DAOMaquinas(conexion, fa);
-            this.daoPartes = new DAOPartes(conexion, fa);
+            this.daoZonas = new DAOZonas(conexion, fa);
+            this.daoRecetas = new DAORecetas(conexion, fa);
+            this.daoProductos = new DAOProductos(conexion, fa);
+            this.daoDecoraciones = new DAODecoraciones(conexion, fa);
+            this.daoServicios = new DAOServicios(conexion, fa);
 
         } catch (FileNotFoundException f){
             System.out.println(f.getMessage());
@@ -97,153 +87,149 @@ public class FachadaBaseDatos {
         }
         
     }
-
-    public Usuario validarUsuario(String nickname, String contrasenha){
-        return daoUsuarios.validarUsuario(nickname, contrasenha);
-    }
-    
-    public void editarUsuario(String dni, String nickname, Float saldo, String contrasenha){
-        daoUsuarios.editarUsuario(dni, nickname, saldo, contrasenha);
-    }
     
     public Empleado validarAdministrador(String nombre, String contrasenha){
         return daoEmpleados.validarAdministrador(nombre, contrasenha);
     }
     
-    public ArrayList<Ficha> buscarFichas(String color){
-        return daoFichas.buscarFichas(color);
-    }
-    
-    public void editarFichas(String color, float precio, int total_sin_reservar){
-        daoFichas.editarFichas(color, precio, total_sin_reservar);
-    }
-    
-    public void anhadirFichas(String color, float precio, int total_sin_reservar){
-        daoFichas.editarFichas(color, precio, total_sin_reservar);
-    }
-    
-    public void borrarFichas(String color){
-        daoFichas.borrarFichas(color);
-    }
-    
-    public ArrayList<FichasDeUsuario> buscarFichasDeUsuario(String dni){
-        return daoFichas.buscarFichasDeUsuario(dni);
-    }
-    
-    public FichasDeUsuario buscarMasaDeFichas(String dni, String color){
-        return daoFichas.buscarMasaDeFichas(dni, color);
-    }
-    
-    public void editarFichasDeUsuario(String dni, String color, int cantidad){
-        daoFichas.editarFichasDeUsuario(dni, color, cantidad);
-    }
-    
-    public void anhadirFichasDeUsuario(String dni, String color, int cantidad){
-        daoFichas.anhadirFichasDeUsuario(dni, color, cantidad);
-    }
-    
-    public void borrarFichasDeUsuario(String dni, String color){
-        daoFichas.borrarFichasDeUsuario(dni, color);
-    }
-    
-    public ArrayList<Apuesta> buscarApuestas(int id){
-        return daoApuestas.buscarApuestas(id);
-    }
-    
-    public void editarApuestas(int id, float dinero, boolean resultado){
-        daoApuestas.editarApuestas(id, dinero, resultado);
-    }
-    
-    public void anhadirApuestas(int id, float dinero, boolean resultado){
-        daoApuestas.anhadirApuestas(id, dinero, resultado);
-    }
-    
-    public void borrarApuestas(int id){
-        daoApuestas.borrarApuestas(id);
-    }
-    
-    public ArrayList<Maquina> buscarMaquinas(int id){
-        return daoMaquinas.buscarMaquinas(id);
-    }
-    
-    public void editarMaquinas(int id, String nombre, int anho_compra){
-        daoMaquinas.editarMaquinas(id, nombre, anho_compra);
-    }
-    
-    public void anhadirMaquinas(int id, String nombre, int anho_compra){
-        daoMaquinas.anhadirMaquinas(id, nombre, anho_compra);
-    }
-    
-    public void borrarMaquinas(int id){
-        daoMaquinas.borrarMaquinas(id);
-    }
-    
-    public ArrayList<Parte> buscarPartes(int id, String nombre){
-        return daoPartes.buscarPartes(id, nombre);
-    }
-    
-    public void editarPartes(int id, String nombre, String modelo, String productora, String estado){
-        daoPartes.editarPartes(id, nombre, modelo, productora, estado);
-    }
-    
-    public void anhadirPartes(int id, String nombre, String modelo, String productora, String estado){
-        daoPartes.anhadirPartes(id, nombre, modelo, productora, estado);
-    }
-    
-    public void borrarPartes(int id, String nombre){
-        daoPartes.borrarPartes(id, nombre);
-    }
-    
-    public ArrayList<Competitivo> buscarCompetitivos(int id){
-        return daoJuegos.buscarCompetitivos(id);
-    }
-    
-    public void editarCompetitivos(int id, String nombre, java.util.Date fecha_inicio, java.util.Date fecha_final, String tipo, int num_jugadores){
-        daoJuegos.editarCompetitivos(id, nombre, fecha_inicio, fecha_final, tipo, num_jugadores);
-    }
-   
-   public void anhadirCompetitivos(int id, String nombre, java.util.Date fecha_inicio, java.util.Date fecha_final, String tipo, int num_jugadores){
-        daoJuegos.anhadirCompetitivos(id, nombre, fecha_inicio, fecha_final, tipo, num_jugadores);
-    }
-   
-   public void borrarCompetitivos(int id){
-        daoJuegos.borrarCompetitivos(id);
-    }
-   
-   public ArrayList<Mecanico> buscarMecanicos(int id){
-        return daoJuegos.buscarMecanicos(id);
-    }
-    
-    public void editarMecanicos(int id, String nombre, java.util.Date fecha_inicio, java.util.Date fecha_final, String tipo, int id_maquina){
-        daoJuegos.editarMecanicos(id, nombre, fecha_inicio, fecha_final, tipo, id_maquina);
-    }
-   
-   public void anhadirMecanicos(int id, String nombre, java.util.Date fecha_inicio, java.util.Date fecha_final, String tipo, int id_maquina){
-        daoJuegos.anhadirMecanicos(id, nombre, fecha_inicio, fecha_final, tipo, id_maquina);
-    }
-   
-   public void borrarMecanicos(int id){
-       daoJuegos.borrarMecanicos(id);
-    }
-   
-   public ArrayList<Juego> totalJuegos(){
-       return daoJuegos.totalJuegos();
+   public List<Zonas> buscarZonas(){
+       return daoZonas.buscarZonas();
    }
    
-   public ArrayList<TipoJuego> buscarTiposJuego(String tipo){
-        return daoJuegos.buscarTiposJuego(tipo);
-    }
-    
-    public void editarTiposJuego(String tipo, String reglas_basicas){
-        daoJuegos.editarTiposJuego(tipo, reglas_basicas);
-    }
+   public Integer calcularEmpleadosZona(Zonas z){
+       return daoZonas.calcularEmpleadosZona(z); 
+   }
    
-   public void anhadirTiposJuego(String tipo, String reglas_basicas){
-        daoJuegos.anhadirTiposJuego(tipo, reglas_basicas);
-    }
+   public void borrarZona(Zonas z){
+       daoZonas.borrarZona(z);
+   }
    
-   public void borrarTiposJuego(String tipo){
-        daoJuegos.borrarTiposJuego(tipo);
-    }
+   public List<Receta> buscarRecetas(String nombre,Float precio,String ordenarPor){
+       return daoRecetas.buscarRecetas(nombre,precio,ordenarPor);
+   }
+   
+   public List<Producto> buscarProductos(String nombre,Float precio,String ordenarPor){
+       return daoProductos.buscarProductos(nombre,precio,ordenarPor);
+   }
+   
+   public List<Decoracion> buscarDecoraciones(String id,String tipo,String modelo,String ordenarPor){
+       return daoDecoraciones.buscarDecoraciones(id,tipo,modelo,ordenarPor);
+   }
+   
+   public void borrarReceta(Receta r){
+       daoRecetas.borrarReceta(r);
+   }
+   
+   public void borrarEmpleado(Empleado e){
+       daoEmpleados.borrarEmpleado(e);
+   }
+   
+   public void borrarProducto(Producto p){
+       daoProductos.borrarProducto(p);
+   }
+   
+   public void borrarDecoracion(Decoracion d){
+       daoDecoraciones.borrarDecoracion(d);
+   }
+   
+   public void borrarServicio(Servicios s){
+       daoServicios.borrarServicio(s);
+   }
+   
+   public List<Bar> baresRecetaDisponible(Receta r){
+       return daoRecetas.baresRecetaDisponible(r);
+   }
+   
+   public List<Zonas> zonasTrabaja(Empleado e){
+       return daoEmpleados.zonasTrabaja(e);
+   }
+   
+   public List<Zonas> zonasDisponible(Servicios s){
+       return daoServicios.zonasDisponible(s);
+   }
+   
+   public List<Bar> baresRecetaNoDisponible(Receta r){
+       return daoRecetas.baresRecetaNoDisponible(r);
+   }
+   
+   public List<Zonas> zonasNoTrabaja(Empleado e){
+       return daoEmpleados.zonasNoTrabaja(e);
+   }
+   
+   public List<Zonas> zonasNoDisponible(Servicios s){
+       return daoServicios.zonasNoDisponible(s);
+   }
+   
+   public List<Producto> todosLosProductos(){
+       return daoRecetas.todosLosProductos();
+   }
+   
+   public Float cantidadReceta(Receta r,Producto p){
+       return daoRecetas.cantidadReceta(r,p);
+   }
+   
+   public void modificarReceta(Receta receta,List<Bar> bares,List<Producto> productos,List<Float> cantidades){
+       daoRecetas.modificarReceta(receta,bares,productos,cantidades);
+   }
+   
+   public List<Bar> todosLosBares(){
+       return daoRecetas.todosLosBares();
+   }
+   
+   public void anhadirReceta(Receta receta,List<Bar> bares,List<Producto> productos,List<Float> cantidades){
+       daoRecetas.anhadirReceta(receta,bares,productos,cantidades);
+   }
+   
+   public List<Empleado> buscarEmpleados(String dni, String nombre, String rol, String ordenarPor){
+       return daoEmpleados.buscarEmpleados(dni,nombre,rol,ordenarPor);
+   }
+   
+   public List<Servicios> buscarServicios(String nombre, String ordenarPor){
+       return daoServicios.buscarServicios(nombre,ordenarPor);
+   }
+   
+   public void modificarEmpleado(Empleado em,List<Zonas> trabaja){
+       daoEmpleados.modificarEmpleado(em,trabaja);
+   }
+   
+   public void anhadirEmpleado(Empleado em,List<Zonas> trabaja){
+       daoEmpleados.anhadirEmpleado(em,trabaja);
+   }
+   
+   public List<Zonas> todasLasZonas(){
+       return daoZonas.todasLasZonas();
+   }
+   
+   public void modificarServicio(Servicios s, List<Zonas> disponible){
+       daoServicios.modificarServicio(s,disponible);
+   }
+   
+   public void anhadirServicio(Servicios s, List<Zonas> disponible){
+       daoServicios.anhadirServicio(s,disponible);
+   }
+   
+   public void modificarDecoracion(Decoracion d, String zona){
+       daoDecoraciones.modificarDecoracion(d,zona);
+   }
+   
+   public void anhadirDecoracion(Decoracion d, String zona){
+       daoDecoraciones.anhadirDecoracion(d,zona);
+   }
+   
+   public void modificarProducto(Producto p){
+       daoProductos.modificarProducto(p);
+   }
+   
+   public void anhadirProducto(Producto p){
+       daoProductos.anhadirProducto(p);
+   }
+   
+   public void anhadirBar(Bar b){
+       daoZonas.anhadirBar(b);
+   }
+
+   public void anhadirZona(Zonas z){
+       daoZonas.anhadirZona(z);
+   }
 
 }

@@ -4,32 +4,43 @@
  */
 package gui;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Toolkit;
+import aplicacion.Empleado;
+import aplicacion.FachadaAplicacion;
+import aplicacion.Zonas;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author alumnogreibd
  */
 public class VAnhadirEmpleado extends javax.swing.JDialog {
+    
+    
+    private FachadaAplicacion fa;
+    private ModeloListaZonas modeloTrabaja;
+    private ModeloListaZonas modeloNoTrabaja;
 
     /**
      * Creates new form VAnhadirEmpleados
+     * @param parent
+     * @param modal
+     * @param fa
      */
-    public VAnhadirEmpleado(java.awt.Frame parent, boolean modal) {
+    public VAnhadirEmpleado(java.awt.Frame parent, boolean modal,FachadaAplicacion fa) {
         super(parent, modal);
         initComponents();
-        centrarVentana();
-        getContentPane().setBackground(Color.WHITE);
-    }
-    
-    private void centrarVentana() {
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        Dimension frameSize = this.getSize();
-        int x = (screenSize.width - frameSize.width) / 2;
-        int y = (screenSize.height - frameSize.height) / 2;
-        this.setLocation(x, y);
+        this.fa=fa;
+        this.modeloTrabaja=new ModeloListaZonas();
+        this.modeloNoTrabaja=new ModeloListaZonas();
+        jListTrabajaEn.setModel(modeloTrabaja);
+        jListNoTrabajaEn.setModel(modeloNoTrabaja);
+        List<Zonas> trabaja=new ArrayList<>();
+        modeloTrabaja.setElementos(trabaja);
+        List<Zonas> noTrabaja=fa.todasLasZonas();
+        modeloNoTrabaja.setElementos(noTrabaja);
+        jButtonFlechaI.setEnabled(true);
+        jButtonFlechaD.setEnabled(false);
     }
 
     /**
@@ -61,6 +72,7 @@ public class VAnhadirEmpleado extends javax.swing.JDialog {
         jButtonCancelar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Añadir Empleado");
 
         jLabelDNI.setText("DNI:");
 
@@ -74,27 +86,39 @@ public class VAnhadirEmpleado extends javax.swing.JDialog {
 
         jLabelTrabajaEn.setText("Trabaja en:");
 
-        jListNoTrabajaEn.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
+        jListNoTrabajaEn.setModel(new ModeloListaZonas());
         jScrollPane1.setViewportView(jListNoTrabajaEn);
 
-        jListTrabajaEn.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
+        jListTrabajaEn.setModel(new ModeloListaZonas());
         jScrollPane2.setViewportView(jListTrabajaEn);
 
         jButtonFlechaD.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/flechaD.png"))); // NOI18N
+        jButtonFlechaD.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonFlechaDActionPerformed(evt);
+            }
+        });
 
         jButtonFlechaI.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/flechaI.png"))); // NOI18N
+        jButtonFlechaI.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonFlechaIActionPerformed(evt);
+            }
+        });
 
         jButtonAceptar.setText("Aceptar");
+        jButtonAceptar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAceptarActionPerformed(evt);
+            }
+        });
 
         jButtonCancelar.setText("Cancelar");
+        jButtonCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCancelarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -115,7 +139,7 @@ public class VAnhadirEmpleado extends javax.swing.JDialog {
                             .addComponent(jTextFieldNombre)
                             .addComponent(jTextFieldRol)
                             .addComponent(jTextFieldContrasenha))
-                        .addGap(0, 4, Short.MAX_VALUE)
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(38, 38, 38)
@@ -127,15 +151,16 @@ public class VAnhadirEmpleado extends javax.swing.JDialog {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(jLabelTrabajaEn)
-                                .addGap(85, 85, 85)))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jScrollPane1)
-                            .addComponent(jLabelNoTrabajaEn)))
+                                .addGap(85, 85, 85))))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jButtonAceptar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButtonCancelar)))
-                .addContainerGap())
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jLabelNoTrabajaEn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(jButtonCancelar))
+                .addGap(21, 21, 21))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -185,8 +210,40 @@ public class VAnhadirEmpleado extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButtonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_jButtonCancelarActionPerformed
+
+    private void jButtonFlechaDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFlechaDActionPerformed
+        // TODO add your handling code here:
+        modeloNoTrabaja.nuevoElemento(modeloNoTrabaja.obtenerZona(jListNoTrabajaEn.getSelectedIndex()));
+        modeloTrabaja.borrarElemento(jListTrabajaEn.getSelectedIndex());
+        if (modeloTrabaja.getSize()==0) jButtonFlechaD.setEnabled(false);
+        else jListTrabajaEn.setSelectedIndex(0);
+        jListNoTrabajaEn.setSelectedIndex(modeloTrabaja.getSize()-1);
+        jButtonFlechaI.setEnabled(true);
+    }//GEN-LAST:event_jButtonFlechaDActionPerformed
+
+    private void jButtonFlechaIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFlechaIActionPerformed
+        // TODO add your handling code here:
+        modeloTrabaja.nuevoElemento(modeloTrabaja.obtenerZona(jListTrabajaEn.getSelectedIndex()));
+        modeloNoTrabaja.borrarElemento(jListNoTrabajaEn.getSelectedIndex());
+        if (modeloNoTrabaja.getSize()==0) jButtonFlechaI.setEnabled(false);
+        else jListNoTrabajaEn.setSelectedIndex(0);
+        jListTrabajaEn.setSelectedIndex(modeloNoTrabaja.getSize()-1);
+        jButtonFlechaD.setEnabled(true);
+    }//GEN-LAST:event_jButtonFlechaIActionPerformed
+
+    private void jButtonAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAceptarActionPerformed
+        // TODO add your handling code here:
+        Empleado nuevo=new Empleado(jTextFieldDNI.getText(),jTextFieldNombre.getText(),jTextFieldRol.getText(),jTextFieldContrasenha.getText());
+        fa.anhadirEmpleado(nuevo,modeloTrabaja.getElementos());
+        this.dispose();
+    }//GEN-LAST:event_jButtonAceptarActionPerformed
+
     
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAceptar;
     private javax.swing.JButton jButtonCancelar;

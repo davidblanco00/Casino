@@ -4,33 +4,41 @@
  */
 package gui;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Toolkit;
+import aplicacion.FachadaAplicacion;
+import aplicacion.Servicios;
+import aplicacion.Zonas;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author alumnogreibd
  */
 public class VAnhadirServicio extends javax.swing.JDialog {
+    
+    private FachadaAplicacion fa;
+    private ModeloListaZonas modeloDisponible;
+    private ModeloListaZonas modeloNoDisponible;
 
     /**
      * Creates new form VAnhadirEmpleados
      */
-    public VAnhadirServicio(java.awt.Frame parent, boolean modal) {
+    public VAnhadirServicio(java.awt.Frame parent, boolean modal,FachadaAplicacion fa) {
         super(parent, modal);
         initComponents();
-        centrarVentana();
-        getContentPane().setBackground(Color.WHITE);
+        this.fa=fa;
+        this.modeloDisponible=new ModeloListaZonas();
+        this.modeloNoDisponible=new ModeloListaZonas();
+        jListDisponibleEn.setModel(modeloDisponible);
+        jListNoDisponibleEn.setModel(modeloNoDisponible);
+        List<Zonas> disponible=new ArrayList<>();
+        modeloDisponible.setElementos(disponible);
+        List<Zonas> noDisponible=fa.todasLasZonas();
+        modeloNoDisponible.setElementos(noDisponible);
+        jButtonFlechaI.setEnabled(true);
+        jButtonFlechaD.setEnabled(false);
     }
 
-    private void centrarVentana() {
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        Dimension frameSize = this.getSize();
-        int x = (screenSize.width - frameSize.width) / 2;
-        int y = (screenSize.height - frameSize.height) / 2;
-        this.setLocation(x, y);
-    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -54,9 +62,10 @@ public class VAnhadirServicio extends javax.swing.JDialog {
         jButtonAceptar = new javax.swing.JButton();
         jButtonCancelar = new javax.swing.JButton();
         jScrollPaneDescripcion = new javax.swing.JScrollPane();
-        jEditorPane1 = new javax.swing.JEditorPane();
+        jEditorPaneDescripcion = new javax.swing.JEditorPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Servicio");
 
         jLabelNombre.setText("Nombre:");
 
@@ -66,29 +75,41 @@ public class VAnhadirServicio extends javax.swing.JDialog {
 
         jLabelDisponibleEn.setText("Disponible en:");
 
-        jListNoDisponibleEn.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
+        jListNoDisponibleEn.setModel(new ModeloListaZonas());
         jScrollPane1.setViewportView(jListNoDisponibleEn);
 
-        jListDisponibleEn.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
+        jListDisponibleEn.setModel(new ModeloListaZonas());
         jScrollPane2.setViewportView(jListDisponibleEn);
 
         jButtonFlechaD.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/flechaD.png"))); // NOI18N
+        jButtonFlechaD.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonFlechaDActionPerformed(evt);
+            }
+        });
 
         jButtonFlechaI.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/flechaI.png"))); // NOI18N
+        jButtonFlechaI.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonFlechaIActionPerformed(evt);
+            }
+        });
 
         jButtonAceptar.setText("Aceptar");
+        jButtonAceptar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAceptarActionPerformed(evt);
+            }
+        });
 
         jButtonCancelar.setText("Cancelar");
+        jButtonCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCancelarActionPerformed(evt);
+            }
+        });
 
-        jScrollPaneDescripcion.setViewportView(jEditorPane1);
+        jScrollPaneDescripcion.setViewportView(jEditorPaneDescripcion);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -111,62 +132,92 @@ public class VAnhadirServicio extends javax.swing.JDialog {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(jButtonFlechaD, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jButtonFlechaI, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addComponent(jLabelDisponibleEn))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(0, 5, Short.MAX_VALUE)
-                                .addComponent(jLabelNoDisponibleEn))
-                            .addComponent(jScrollPane1)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabelNoDisponibleEn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                        .addGap(26, 26, 26))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(209, 209, 209)
-                        .addComponent(jButtonCancelar)))
-                .addContainerGap())
+                        .addComponent(jButtonCancelar)
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelNombre)
+                    .addComponent(jTextFieldNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabelDescripcion)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPaneDescripcion)
+                .addGap(18, 18, 18)
+                .addComponent(jButtonAceptar)
+                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelNoDisponibleEn)
+                    .addComponent(jLabelDisponibleEn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabelNombre)
-                            .addComponent(jTextFieldNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabelDescripcion)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPaneDescripcion)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButtonAceptar)
-                        .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabelNoDisponibleEn)
-                            .addComponent(jLabelDisponibleEn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
-                                    .addComponent(jScrollPane1))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButtonCancelar)
-                                .addGap(5, 5, 5))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(29, 29, 29)
-                                .addComponent(jButtonFlechaD)
-                                .addGap(18, 18, 18)
-                                .addComponent(jButtonFlechaI)
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 191, Short.MAX_VALUE)
+                            .addComponent(jScrollPane1))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(64, 64, 64)
+                        .addComponent(jButtonFlechaD)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButtonFlechaI)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addComponent(jButtonCancelar)
+                .addGap(5, 5, 5))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButtonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_jButtonCancelarActionPerformed
+
+    private void jButtonFlechaDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFlechaDActionPerformed
+        // TODO add your handling code here:
+        modeloNoDisponible.nuevoElemento(modeloNoDisponible.obtenerZona(jListNoDisponibleEn.getSelectedIndex()));
+        modeloDisponible.borrarElemento(jListDisponibleEn.getSelectedIndex());
+        if (modeloDisponible.getSize()==0) jButtonFlechaD.setEnabled(false);
+        else jListDisponibleEn.setSelectedIndex(0);
+        jListNoDisponibleEn.setSelectedIndex(modeloDisponible.getSize()-1);
+        jButtonFlechaI.setEnabled(true);
+    }//GEN-LAST:event_jButtonFlechaDActionPerformed
+
+    private void jButtonFlechaIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFlechaIActionPerformed
+        // TODO add your handling code here:
+        modeloDisponible.nuevoElemento(modeloDisponible.obtenerZona(jListDisponibleEn.getSelectedIndex()));
+        modeloNoDisponible.borrarElemento(jListNoDisponibleEn.getSelectedIndex());
+        if (modeloNoDisponible.getSize()==0) jButtonFlechaI.setEnabled(false);
+        else jListNoDisponibleEn.setSelectedIndex(0);
+        jListDisponibleEn.setSelectedIndex(modeloNoDisponible.getSize()-1);
+        jButtonFlechaD.setEnabled(true);
+    }//GEN-LAST:event_jButtonFlechaIActionPerformed
+
+    private void jButtonAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAceptarActionPerformed
+        // TODO add your handling code here:
+        Servicios nuevo=new Servicios(jTextFieldNombre.getText(),jEditorPaneDescripcion.getText());
+        fa.anhadirServicio(nuevo,modeloDisponible.getElementos());
+        this.dispose();
+    }//GEN-LAST:event_jButtonAceptarActionPerformed
+
+   
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -174,7 +225,7 @@ public class VAnhadirServicio extends javax.swing.JDialog {
     private javax.swing.JButton jButtonCancelar;
     private javax.swing.JButton jButtonFlechaD;
     private javax.swing.JButton jButtonFlechaI;
-    private javax.swing.JEditorPane jEditorPane1;
+    private javax.swing.JEditorPane jEditorPaneDescripcion;
     private javax.swing.JLabel jLabelDescripcion;
     private javax.swing.JLabel jLabelDisponibleEn;
     private javax.swing.JLabel jLabelNoDisponibleEn;

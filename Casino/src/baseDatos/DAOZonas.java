@@ -46,7 +46,7 @@ public class DAOZonas extends AbstractDAO {
         rsZonas=stmZonas.executeQuery();
         while (rsZonas.next())
         {
-            resultado.add(new Zonas(rsZonas.getString("Zonas.nombre")));
+            resultado.add(new Zonas(rsZonas.getString(1)));
 
         }
         } catch (SQLException e){
@@ -65,7 +65,7 @@ public class DAOZonas extends AbstractDAO {
         rsZonas=stmZonas.executeQuery();
         while (rsZonas.next())
         {
-            resultado.add(new Bar(rsZonas.getString("Bar.nombre_zona")));
+            resultado.add(new Bar(rsZonas.getString(1)));
 
         }
         } catch (SQLException e){
@@ -106,6 +106,126 @@ public class DAOZonas extends AbstractDAO {
           try {stmZonas.close();} catch (SQLException e){System.out.println("Imposible cerrar cursores");}
         }
         return resultado;
+    }
+    
+    public void borrarZona(Zonas z){
+        Connection con;
+        PreparedStatement stmZona=null;
+
+        con=super.getConexion();
+
+        try {
+        stmZona=con.prepareStatement("delete from Bar where Bar.nombre_zona = ?");
+        stmZona.setString(1, z.getNombre());
+        stmZona.executeUpdate();
+
+        } catch (SQLException e){
+          System.out.println(e.getMessage());
+          this.getFachadaAplicacion().muestraExcepcion(e.getMessage());
+        }finally{
+          try {stmZona.close();} catch (SQLException e){System.out.println("Imposible cerrar cursores");}
+        }
+        try {
+        stmZona=con.prepareStatement("delete from Zonas where Zonas.nombre = ?");
+        stmZona.setString(1, z.getNombre());
+        stmZona.executeUpdate();
+
+        } catch (SQLException e){
+          System.out.println(e.getMessage());
+          this.getFachadaAplicacion().muestraExcepcion(e.getMessage());
+        }finally{
+          try {stmZona.close();} catch (SQLException e){System.out.println("Imposible cerrar cursores");}
+        }
+    }
+    
+    public List<Zonas> todasLasZonas(){
+        List<Zonas> resultado=new ArrayList<Zonas>();
+        Connection con;
+        String query;
+        PreparedStatement stmZonas=null;
+        ResultSet rsZonas;
+
+        con=this.getConexion();
+        
+        query = "select Zonas.nombre "+
+                "from  Zonas ";
+
+        try {
+        stmZonas=con.prepareStatement(query);
+        
+        rsZonas=stmZonas.executeQuery();
+        while (rsZonas.next())
+        {
+            resultado.add(new Zonas(rsZonas.getString(1)));
+
+        }
+        } catch (SQLException e){
+          System.out.println(e.getMessage());
+          this.getFachadaAplicacion().muestraExcepcion(e.getMessage());
+        }finally{
+          try {stmZonas.close();} catch (SQLException e){System.out.println("Imposible cerrar cursores");}
+        }
+        return resultado;
+    }
+    
+    public void anhadirBar(Bar b){
+        Connection con;
+        PreparedStatement stmZona=null;
+        String query;
+        
+
+        con=super.getConexion();
+        
+        try {
+        stmZona=con.prepareStatement("insert into Zonas(nombre) "+
+                                    "values(?) ");
+        stmZona.setString(1, b.getNombre());
+        stmZona.executeUpdate();
+
+
+        } catch (SQLException e){
+          System.out.println(e.getMessage());
+          this.getFachadaAplicacion().muestraExcepcion(e.getMessage());
+        }finally{
+          try {stmZona.close();} catch (SQLException e){System.out.println("Imposible cerrar cursores");}
+        }
+        
+        try {
+        stmZona=con.prepareStatement("insert into Bar(nombre_zona) "+
+                                    "values(?) ");
+        stmZona.setString(1, b.getNombre());
+        stmZona.executeUpdate();
+
+
+        } catch (SQLException e){
+          System.out.println(e.getMessage());
+          this.getFachadaAplicacion().muestraExcepcion(e.getMessage());
+        }finally{
+          try {stmZona.close();} catch (SQLException e){System.out.println("Imposible cerrar cursores");}
+        }
+    }
+    
+    public void anhadirZona(Zonas z){
+        Connection con;
+        PreparedStatement stmZona=null;
+        String query;
+        
+
+        con=super.getConexion();
+        
+        try {
+        stmZona=con.prepareStatement("insert into Zonas(nombre) "+
+                                    "values(?) ");
+        stmZona.setString(1, z.getNombre());
+        stmZona.executeUpdate();
+
+
+        } catch (SQLException e){
+          System.out.println(e.getMessage());
+          this.getFachadaAplicacion().muestraExcepcion(e.getMessage());
+        }finally{
+          try {stmZona.close();} catch (SQLException e){System.out.println("Imposible cerrar cursores");}
+        }
     }
     
 }

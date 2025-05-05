@@ -4,26 +4,28 @@
  */
 
 package gui;
-import aplicacion.Usuario;
+import aplicacion.Empleado;
 import javax.swing.table.AbstractTableModel;
 
 /**
  *
- * @author alumnogreibd
+ * @author david
  */
-public class ModeloTablaUsuarios extends AbstractTableModel{
-    private java.util.List<Usuario> usuarios;
+public class ModeloTablaEmpleados extends AbstractTableModel{
+    private java.util.List<Empleado> empleados;
     
-    public ModeloTablaUsuarios(){
-        this.usuarios=new java.util.ArrayList<Usuario>();
+    public ModeloTablaEmpleados(){
+        this.empleados=new java.util.ArrayList<>();
     }
     
+    @Override
     public int getColumnCount (){
-        return 4;
+        return 3;
     }
     
+    @Override
     public int getRowCount() {
-        return usuarios.size();
+        return empleados.size();
     }
     
     @Override
@@ -32,9 +34,8 @@ public class ModeloTablaUsuarios extends AbstractTableModel{
 
         switch (col){
             case 0: nombre= "DNI"; break;
-            case 1: nombre= "Nickname"; break;
-            case 2: nombre="Saldo"; break;
-            case 3: nombre="Contraseña"; break;
+            case 1: nombre= "Nombre"; break;
+            case 2: nombre= "Rol"; break;
         }
         return nombre;
     }
@@ -46,8 +47,7 @@ public class ModeloTablaUsuarios extends AbstractTableModel{
         switch (col){
             case 0: clase= java.lang.String.class; break;
             case 1: clase= java.lang.String.class; break;
-            case 2: clase=java.lang.String.class; break;
-            case 3: clase=java.lang.String.class; break;
+            case 2: clase= java.lang.String.class; break;
         }
         return clase;
     }
@@ -57,24 +57,25 @@ public class ModeloTablaUsuarios extends AbstractTableModel{
         return false;
     }
 
+    @Override
     public Object getValueAt(int row, int col) {
         Object resultado=null;
 
         switch (col){
-            case 0: resultado=usuarios.get(row).getDni(); break;
-            case 1: resultado=usuarios.get(row).getNickname(); break;
-            case 2: resultado=usuarios.get(row).getSaldo();break;
-            case 3: resultado=usuarios.get(row).getContrasenha(); break;
+            case 0: resultado=empleados.get(row).getDni(); break;
+            case 1: resultado=empleados.get(row).getNombre(); break;
+            case 2: resultado=empleados.get(row).getRol(); break;
         }
+        
         return resultado;
     }
     
-    public void setFilas(java.util.List<Usuario> usuarios){
-        this.usuarios=usuarios;
+    public void setFilas(java.util.List<Empleado> empleados){
+        this.empleados=empleados;
         fireTableDataChanged();
     }
 
-    public Usuario obtenerUsuario(int i){
-        return this.usuarios.get(i);
+    public Empleado obtenerEmpleado(int i){
+        return this.empleados.get(i);
     }
 }

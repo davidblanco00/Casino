@@ -5,7 +5,7 @@
 
 package baseDatos;
 
-import aplicacion.Empleado;
+import aplicacion.Servicios;
 import aplicacion.Zonas;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,62 +18,27 @@ import java.util.List;
  *
  * @author basesdatos
  */
-public class DAOEmpleados extends AbstractDAO{
+public class DAOServicios extends AbstractDAO{
    
-    public DAOEmpleados (Connection conexion, aplicacion.FachadaAplicacion fa){
+    public DAOServicios (Connection conexion, aplicacion.FachadaAplicacion fa){
         super.setConexion(conexion);
         super.setFachadaAplicacion(fa);
     }
 
-    public Empleado validarAdministrador(String nombre, String contrasenha){
-        Empleado resultado=null;
-        Connection con;
-        String query;
-        PreparedStatement stmUsuario=null;
-        ResultSet rsUsuario;
-
-        con=this.getConexion();
-        
-        query = "select dni, nombre, rol, contrasenha "+
-                "from empleado "+
-                "where nombre = '"+nombre+"' and contrasenha = '"+contrasenha+"' ";
-
-        try {
-        stmUsuario=con.prepareStatement(query);
-        
-        rsUsuario=stmUsuario.executeQuery();
-        if (rsUsuario.next())
-        {
-            resultado = new Empleado(rsUsuario.getString("dni"), 
-                                    rsUsuario.getString("nombre"),
-                                    rsUsuario.getString("rol"),
-                                    rsUsuario.getString("contrasenha"));
-
-        }
-        } catch (SQLException e){
-          System.out.println(e.getMessage());
-          this.getFachadaAplicacion().muestraExcepcion(e.getMessage());
-        }finally{
-          try {stmUsuario.close();} catch (SQLException e){System.out.println("Imposible cerrar cursores");}
-        }
-        
-        return resultado;
-    }
+    
    
-    public List<Empleado> buscarEmpleados(String dni,String nombre,String rol,String ordenarPor){
-        List<Empleado> resultado=new ArrayList<Empleado>();
-        Empleado empleadoActual;
+    public List<Servicios> buscarServicios(String nombre,String ordenarPor){
+        List<Servicios> resultado=new ArrayList<>();
+        Servicios servicioActual;
         Connection con;
-        PreparedStatement stmEmpleados=null;
-        ResultSet rsEmpleados;
+        PreparedStatement stmServicios=null;
+        ResultSet rsServicios;
 
         con=this.getConexion();
         
-        String consulta = "select dni,nombre,rol,contrasenha " +
-                                         "from Empleados "+
-                                         "where nombre like ? "
-                                         + "and dni like ? "
-                                         + "and rol like ? ";
+        String consulta = "select nombre,descripcion " +
+                                         "from Servicios "+
+                                         "where nombre like ? ";
         
         if(ordenarPor.equals("Orden alfabético (ascendente)")){
             consulta=consulta+"order by nombre asc ";
@@ -82,46 +47,44 @@ public class DAOEmpleados extends AbstractDAO{
             consulta=consulta+"order by nombre desc ";
         }
         try  {
-         stmEmpleados=con.prepareStatement(consulta);
-         stmEmpleados.setString(1, "%"+nombre+"%");
-         stmEmpleados.setString(2, "%"+dni+"%");
-         stmEmpleados.setString(3, "%"+rol+"%");
-         rsEmpleados=stmEmpleados.executeQuery();
-        while (rsEmpleados.next())
+         stmServicios=con.prepareStatement(consulta);
+         stmServicios.setString(1, "%"+nombre+"%");
+         rsServicios=stmServicios.executeQuery();
+        while (rsServicios.next())
         {
-            empleadoActual=new Empleado(rsEmpleados.getString(1),rsEmpleados.getString(2),rsEmpleados.getString(3),rsEmpleados.getString(4));
-            resultado.add(empleadoActual);
+            servicioActual=new Servicios(rsServicios.getString(1),rsServicios.getString(2));
+            resultado.add(servicioActual);
         }
 
         } catch (SQLException e){
           System.out.println(e.getMessage());
           this.getFachadaAplicacion().muestraExcepcion(e.getMessage());
         }finally{
-          try {stmEmpleados.close();} catch (SQLException e){System.out.println("Imposible cerrar cursores");}
+          try {stmServicios.close();} catch (SQLException e){System.out.println("Imposible cerrar cursores");}
         }
         return resultado;
     }
     
-    public void borrarEmpleado(Empleado em){
+    public void borrarServicio(Servicios s){
         Connection con;
-        PreparedStatement stmEmpleado=null;
+        PreparedStatement stmServicio=null;
 
         con=super.getConexion();
 
         try {
-        stmEmpleado=con.prepareStatement("delete from Empleados where dni = ?");
-        stmEmpleado.setString(1, em.getDni());
-        stmEmpleado.executeUpdate();
+        stmServicio=con.prepareStatement("delete from Servicios where nombre = ?");
+        stmServicio.setString(1, s.getNombre());
+        stmServicio.executeUpdate();
 
         } catch (SQLException e){
           System.out.println(e.getMessage());
           this.getFachadaAplicacion().muestraExcepcion(e.getMessage());
         }finally{
-          try {stmEmpleado.close();} catch (SQLException e){System.out.println("Imposible cerrar cursores");}
+          try {stmServicio.close();} catch (SQLException e){System.out.println("Imposible cerrar cursores");}
         }
     }
     
-    public List<Zonas> zonasTrabaja(Empleado em){
+    public List<Zonas> zonasDisponible(Servicios s){
         List<Zonas> resultado=new ArrayList<Zonas>();
         Connection con;
         String query;
@@ -134,13 +97,13 @@ public class DAOEmpleados extends AbstractDAO{
                 "from  Zonas "+
                 "where nombre in ( "
                 + "select zona "
-                + "from zonas_empleados "
-                + "where empleado=? "
+                + "from zonas_servicios "
+                + "where servicio=? "
                 + ") ";
 
         try {
         stmZonas=con.prepareStatement(query);
-        stmZonas.setString(1, em.getDni());
+        stmZonas.setString(1, s.getNombre());
         rsZonas=stmZonas.executeQuery();
         while (rsZonas.next())
         {
@@ -156,7 +119,7 @@ public class DAOEmpleados extends AbstractDAO{
         return resultado;
     }
     
-    public List<Zonas> zonasNoTrabaja(Empleado em){
+    public List<Zonas> zonasNoDisponible(Servicios s){
         List<Zonas> resultado=new ArrayList<Zonas>();
         Connection con;
         String query;
@@ -169,13 +132,13 @@ public class DAOEmpleados extends AbstractDAO{
                 "from  Zonas "+
                 "where not nombre in ( "
                 + "select zona "
-                + "from zonas_empleados "
-                + "where empleado=? "
+                + "from zonas_servicios "
+                + "where servicio=? "
                 + ") ";
 
         try {
         stmZonas=con.prepareStatement(query);
-        stmZonas.setString(1, em.getDni());
+        stmZonas.setString(1, s.getNombre());
         rsZonas=stmZonas.executeQuery();
         while (rsZonas.next())
         {
@@ -191,19 +154,19 @@ public class DAOEmpleados extends AbstractDAO{
         return resultado;
     }
     
-    public void modificarEmpleado(Empleado em,List<Zonas> trabaja){
+    public void modificarServicio(Servicios s, List<Zonas> disponible){
         Connection con;
         PreparedStatement stmEmpleado=null;
         String query;
         
-        int nbares=trabaja.size();
+        int nzonas=disponible.size();
         int i;
 
         con=super.getConexion();
 
         try {
-        stmEmpleado=con.prepareStatement("delete from zonas_empleados where empleado = ?");
-        stmEmpleado.setString(1, em.getDni());
+        stmEmpleado=con.prepareStatement("delete from zonas_servicios where servicio = ?");
+        stmEmpleado.setString(1, s.getNombre());
         stmEmpleado.executeUpdate();
 
         } catch (SQLException e){
@@ -214,15 +177,11 @@ public class DAOEmpleados extends AbstractDAO{
         }
         
         try {
-        stmEmpleado=con.prepareStatement("update Empleados "+
-                                    "set nombre=?, "
-                                    + "rol=?, "
-                                    + "contrasenha=? "+
-                                    "where dni=?");
-        stmEmpleado.setString(1, em.getNombre());
-        stmEmpleado.setString(2, em.getRol());
-        stmEmpleado.setString(3, em.getContrasenha());
-        stmEmpleado.setString(4, em.getDni());
+        stmEmpleado=con.prepareStatement("update Servicios "+
+                                    "set descripcion=? "+
+                                    "where nombre=?");
+        stmEmpleado.setString(1, s.getDescripcion());
+        stmEmpleado.setString(2, s.getNombre());
         stmEmpleado.executeUpdate();
 
 
@@ -233,12 +192,12 @@ public class DAOEmpleados extends AbstractDAO{
           try {stmEmpleado.close();} catch (SQLException e){System.out.println("Imposible cerrar cursores");}
         }
         
-        for(i=0;i<nbares;i++){
+        for(i=0;i<nzonas;i++){
             try{
-                stmEmpleado=con.prepareStatement("insert into zonas_empleados(zona,empleado) "+
+                stmEmpleado=con.prepareStatement("insert into zonas_servicios(zona,servicio) "+
                                         "values(?,?) ");
-                stmEmpleado.setString(1, trabaja.get(i).getNombre());
-                stmEmpleado.setString(2, em.getDni());
+                stmEmpleado.setString(1, disponible.get(i).getNombre());
+                stmEmpleado.setString(2, s.getNombre());
             }catch (SQLException e){
                 System.out.println(e.getMessage());
                 this.getFachadaAplicacion().muestraExcepcion(e.getMessage());
@@ -246,16 +205,14 @@ public class DAOEmpleados extends AbstractDAO{
                  try {stmEmpleado.close();} catch (SQLException e){System.out.println("Imposible cerrar cursores");}
             }
         }
-        
-        
     }
     
-    public void anhadirEmpleado(Empleado em,List<Zonas> trabaja){
+    public void anhadirServicio(Servicios s, List<Zonas> disponible){
         Connection con;
         PreparedStatement stmEmpleado=null;
         String query;
         
-        int nbares=trabaja.size();
+        int nzonas=disponible.size();
         int i;
 
         con=super.getConexion();
@@ -263,12 +220,10 @@ public class DAOEmpleados extends AbstractDAO{
         
         
         try {
-        stmEmpleado=con.prepareStatement("insert into Empleados(dni,nombre,rol,contrasenha) "+
-                                    "values(?,?,?,?) ");
-        stmEmpleado.setString(1, em.getDni());
-        stmEmpleado.setString(2, em.getNombre());
-        stmEmpleado.setString(3, em.getRol());
-        stmEmpleado.setString(4, em.getContrasenha());
+        stmEmpleado=con.prepareStatement("insert into Servicios(descripcion,nombre) "+
+                                    "values(?,?) ");
+        stmEmpleado.setString(1, s.getDescripcion());
+        stmEmpleado.setString(2, s.getNombre());
         stmEmpleado.executeUpdate();
 
 
@@ -279,12 +234,12 @@ public class DAOEmpleados extends AbstractDAO{
           try {stmEmpleado.close();} catch (SQLException e){System.out.println("Imposible cerrar cursores");}
         }
         
-        for(i=0;i<nbares;i++){
+        for(i=0;i<nzonas;i++){
             try{
-                stmEmpleado=con.prepareStatement("insert into zonas_empleados(zona,empleado) "+
+                stmEmpleado=con.prepareStatement("insert into zonas_servicios(zona,servicio) "+
                                         "values(?,?) ");
-                stmEmpleado.setString(1, trabaja.get(i).getNombre());
-                stmEmpleado.setString(2, em.getDni());
+                stmEmpleado.setString(1, disponible.get(i).getNombre());
+                stmEmpleado.setString(2, s.getNombre());
             }catch (SQLException e){
                 System.out.println(e.getMessage());
                 this.getFachadaAplicacion().muestraExcepcion(e.getMessage());
@@ -292,8 +247,8 @@ public class DAOEmpleados extends AbstractDAO{
                  try {stmEmpleado.close();} catch (SQLException e){System.out.println("Imposible cerrar cursores");}
             }
         }
-        
-        
     }
+    
+    
    
 }

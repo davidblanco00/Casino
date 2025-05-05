@@ -4,9 +4,11 @@
  */
 package gui;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Toolkit;
+import aplicacion.Receta;
+import aplicacion.Bar;
+import aplicacion.Producto;
+import aplicacion.FachadaAplicacion;
+import java.util.List;
 
 /**
  *
@@ -14,22 +16,41 @@ import java.awt.Toolkit;
  */
 public class VModificarReceta extends javax.swing.JDialog {
 
-    /**
+  
+    
+    private FachadaAplicacion fa;
+    private Receta anterior;
+    private ModeloListaBares modeloDisponible;
+    private ModeloListaBares modeloNoDisponible;
+    private ModeloTablaProductosReceta modeloProductos;
+    
+      /**
      * Creates new form VAnhadirEmpleados
      */
-    public VModificarReceta(java.awt.Frame parent, boolean modal) {
+    public VModificarReceta(java.awt.Frame parent, boolean modal,FachadaAplicacion fa, Receta anterior) {
         super(parent, modal);
         initComponents();
-        centrarVentana();
-        getContentPane().setBackground(Color.WHITE);
-    }
-    
-    private void centrarVentana() {
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        Dimension frameSize = this.getSize();
-        int x = (screenSize.width - frameSize.width) / 2;
-        int y = (screenSize.height - frameSize.height) / 2;
-        this.setLocation(x, y);
+        this.fa=fa;
+        this.anterior=anterior;
+        this.modeloDisponible=new ModeloListaBares();
+        this.modeloNoDisponible=new ModeloListaBares();
+        this.modeloProductos=new ModeloTablaProductosReceta();
+        jListDisponibleEn.setModel(modeloDisponible);
+        jListNoDisponibleEn.setModel(modeloNoDisponible);
+        jTableProductos.setModel(modeloProductos);
+        jTextFieldNombre.setText(anterior.getNombre());
+        jTextFieldNombre.setText(Float.toString(anterior.getPrecio_venta()));
+        List<Bar> baresDisponible=fa.baresRecetaDisponible(anterior);
+        modeloDisponible.setElementos(baresDisponible);
+        List<Bar> baresNoDisponible=fa.baresRecetaNoDisponible(anterior);
+        modeloNoDisponible.setElementos(baresNoDisponible);
+        if (modeloDisponible.getSize()==0) jButtonFlechaD.setEnabled(false);
+        else jButtonFlechaD.setEnabled(true);
+        if (modeloNoDisponible.getSize()==0) jButtonFlechaI.setEnabled(false);
+        else jButtonFlechaI.setEnabled(true);
+        List<Producto> productos=fa.todosLosProductos();
+        List<Float> cantidades=fa.emparejarCantidadesProductos(anterior,productos);
+        modeloProductos.setFilas(productos,cantidades);
     }
 
     /**
@@ -46,9 +67,9 @@ public class VModificarReceta extends javax.swing.JDialog {
         jLabelProductos = new javax.swing.JLabel();
         jLabelNoDisponibleEn = new javax.swing.JLabel();
         jLabelDisponibleEn = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        jScrollPaneNoDisponibleEn = new javax.swing.JScrollPane();
         jListNoDisponibleEn = new javax.swing.JList<>();
-        jScrollPane2 = new javax.swing.JScrollPane();
+        jScrollPaneDisponibleEn = new javax.swing.JScrollPane();
         jListDisponibleEn = new javax.swing.JList<>();
         jTextFieldPrecio = new javax.swing.JTextField();
         jTextFieldNombre = new javax.swing.JTextField();
@@ -57,9 +78,10 @@ public class VModificarReceta extends javax.swing.JDialog {
         jButtonAceptar = new javax.swing.JButton();
         jButtonCancelar = new javax.swing.JButton();
         jScrollPaneProductos = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTableProductos = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Modificar Recetas");
 
         jLabelNombre.setText("Nombre:");
 
@@ -71,40 +93,44 @@ public class VModificarReceta extends javax.swing.JDialog {
 
         jLabelDisponibleEn.setText("Disponible en:");
 
-        jListNoDisponibleEn.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane1.setViewportView(jListNoDisponibleEn);
+        jListNoDisponibleEn.setModel(new ModeloListaBares());
+        jScrollPaneNoDisponibleEn.setViewportView(jListNoDisponibleEn);
 
-        jListDisponibleEn.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane2.setViewportView(jListDisponibleEn);
+        jListDisponibleEn.setModel(new ModeloListaBares());
+        jScrollPaneDisponibleEn.setViewportView(jListDisponibleEn);
+
+        jTextFieldNombre.setEditable(false);
 
         jButtonFlechaD.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/flechaD.png"))); // NOI18N
+        jButtonFlechaD.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonFlechaDActionPerformed(evt);
+            }
+        });
 
         jButtonFlechaI.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/flechaI.png"))); // NOI18N
+        jButtonFlechaI.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonFlechaIActionPerformed(evt);
+            }
+        });
 
         jButtonAceptar.setText("Aceptar");
+        jButtonAceptar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAceptarActionPerformed(evt);
+            }
+        });
 
         jButtonCancelar.setText("Cancelar");
-
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+        jButtonCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCancelarActionPerformed(evt);
             }
-        ));
-        jScrollPaneProductos.setViewportView(jTable1);
+        });
+
+        jTableProductos.setModel(new ModeloTablaProductosReceta());
+        jScrollPaneProductos.setViewportView(jTableProductos);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -130,66 +156,99 @@ public class VModificarReceta extends javax.swing.JDialog {
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jScrollPaneDisponibleEn, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(jButtonFlechaD, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jButtonFlechaI, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addComponent(jLabelDisponibleEn))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(0, 27, Short.MAX_VALUE)
-                                .addComponent(jLabelNoDisponibleEn))
-                            .addComponent(jScrollPane1)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabelNoDisponibleEn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jScrollPaneNoDisponibleEn, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                        .addGap(18, 18, 18))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(209, 209, 209)
-                        .addComponent(jButtonCancelar)))
-                .addContainerGap())
+                        .addComponent(jButtonCancelar)
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelNombre)
+                    .addComponent(jTextFieldNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelPrecio)
+                    .addComponent(jTextFieldPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabelProductos)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPaneProductos, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButtonAceptar)
+                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelNoDisponibleEn)
+                    .addComponent(jLabelDisponibleEn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabelNombre)
-                            .addComponent(jTextFieldNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabelPrecio)
-                            .addComponent(jTextFieldPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabelProductos)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPaneProductos, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButtonAceptar)
-                        .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabelNoDisponibleEn)
-                            .addComponent(jLabelDisponibleEn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
-                                    .addComponent(jScrollPane1))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButtonCancelar)
-                                .addGap(5, 5, 5))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(29, 29, 29)
-                                .addComponent(jButtonFlechaD)
-                                .addGap(18, 18, 18)
-                                .addComponent(jButtonFlechaI)
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
+                            .addComponent(jScrollPaneDisponibleEn, javax.swing.GroupLayout.DEFAULT_SIZE, 191, Short.MAX_VALUE)
+                            .addComponent(jScrollPaneNoDisponibleEn))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(67, 67, 67)
+                        .addComponent(jButtonFlechaD)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButtonFlechaI)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addComponent(jButtonCancelar)
+                .addGap(5, 5, 5))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButtonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_jButtonCancelarActionPerformed
+
+    private void jButtonFlechaDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFlechaDActionPerformed
+        // TODO add your handling code here:
+        modeloNoDisponible.nuevoElemento(modeloNoDisponible.obtenerBar(jListNoDisponibleEn.getSelectedIndex()));
+        modeloDisponible.borrarElemento(jListDisponibleEn.getSelectedIndex());
+        if (modeloDisponible.getSize()==0) jButtonFlechaD.setEnabled(false);
+        else jListDisponibleEn.setSelectedIndex(0);
+        jListNoDisponibleEn.setSelectedIndex(modeloDisponible.getSize()-1);
+        jButtonFlechaI.setEnabled(true);
+    }//GEN-LAST:event_jButtonFlechaDActionPerformed
+
+    private void jButtonFlechaIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFlechaIActionPerformed
+        // TODO add your handling code here:
+        modeloDisponible.nuevoElemento(modeloDisponible.obtenerBar(jListDisponibleEn.getSelectedIndex()));
+        modeloNoDisponible.borrarElemento(jListNoDisponibleEn.getSelectedIndex());
+        if (modeloNoDisponible.getSize()==0) jButtonFlechaI.setEnabled(false);
+        else jListNoDisponibleEn.setSelectedIndex(0);
+        jListDisponibleEn.setSelectedIndex(modeloNoDisponible.getSize()-1);
+        jButtonFlechaD.setEnabled(true);
+    }//GEN-LAST:event_jButtonFlechaIActionPerformed
+
+    private void jButtonAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAceptarActionPerformed
+        // TODO add your handling code here:
+        Receta nueva=new Receta(anterior.getNombre(),Float.valueOf(jTextFieldPrecio.getText()).floatValue());
+        fa.modificarReceta(nueva,modeloDisponible.getElementos(),modeloProductos.getProductos(),modeloProductos.getCantidades());
+        this.dispose();
+    }//GEN-LAST:event_jButtonAceptarActionPerformed
+
+    /**
+     * @param args the command line arguments
+     */
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -204,10 +263,10 @@ public class VModificarReceta extends javax.swing.JDialog {
     private javax.swing.JLabel jLabelProductos;
     private javax.swing.JList<String> jListDisponibleEn;
     private javax.swing.JList<String> jListNoDisponibleEn;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPaneDisponibleEn;
+    private javax.swing.JScrollPane jScrollPaneNoDisponibleEn;
     private javax.swing.JScrollPane jScrollPaneProductos;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTableProductos;
     private javax.swing.JTextField jTextFieldNombre;
     private javax.swing.JTextField jTextFieldPrecio;
     // End of variables declaration//GEN-END:variables

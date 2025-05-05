@@ -10,12 +10,21 @@ public class Decoracion {
     private String tipo;
     private String modelo;
     private String estado;
+    private String nombre_zona;
 
     public Decoracion(int id, String tipo, String modelo, String estado) {
         this.id = id;
         this.tipo = tipo;
         this.modelo = modelo;
         this.estado = estado;
+    }
+    
+    public Decoracion(int id, String tipo, String modelo, String estado, String nombre_zona) {
+        this.id = id;
+        this.tipo = tipo;
+        this.modelo = modelo;
+        this.estado = estado;
+        this.nombre_zona = nombre_zona;
     }
 
     public int getId() {

@@ -4,32 +4,56 @@
  */
 package gui;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Toolkit;
+import aplicacion.Decoracion;
+import aplicacion.Empleado;
+import aplicacion.FachadaAplicacion;
+import aplicacion.Producto;
+import java.util.List;
+import java.util.ArrayList;
+import aplicacion.Receta;
+import aplicacion.Servicios;
+import javax.swing.JFrame;
+
 
 /**
  *
  * @author alumnogreibd
  */
-public class VGeneral extends javax.swing.JDialog {
+public class VEmRePrDeSe extends javax.swing.JDialog {
 
     /**
      * Creates new form VEmRePrDeSe
      */
-    public VGeneral(java.awt.Frame parent, boolean modal) {
+    
+    private FachadaAplicacion fa;
+    private FachadaGui fgui;
+    
+    private ModeloTablaRecetas modeloRecetas;
+    private ModeloTablaEmpleados modeloEmpleados;
+    private ModeloTablaProductos modeloProductos;
+    private ModeloTablaDecoraciones modeloDecoraciones;
+    private ModeloTablaServicios modeloServicios;
+    
+    public VEmRePrDeSe(java.awt.Frame parent, boolean modal,FachadaAplicacion fa,FachadaGui fgui) {
         super(parent, modal);
         initComponents();
-        centrarVentana();
-        getContentPane().setBackground(Color.WHITE);
-    }
-    
-    private void centrarVentana() {
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        Dimension frameSize = this.getSize();
-        int x = (screenSize.width - frameSize.width) / 2;
-        int y = (screenSize.height - frameSize.height) / 2;
-        this.setLocation(x, y);
+        this.fa=fa;
+        this.fgui=fgui;
+        ModeloTablaRecetas modeloRecetas=new ModeloTablaRecetas();
+        jTableRecetas.setModel(modeloRecetas);
+        this.modeloRecetas=modeloRecetas;
+        ModeloTablaEmpleados modeloEmpleados=new ModeloTablaEmpleados();
+        jTableEmpleados.setModel(modeloEmpleados);
+        this.modeloEmpleados=modeloEmpleados;
+        ModeloTablaProductos modeloProductos=new ModeloTablaProductos();
+        jTableProductos.setModel(modeloProductos);
+        this.modeloProductos=modeloProductos;
+        ModeloTablaDecoraciones modeloDecoraciones=new ModeloTablaDecoraciones();
+        jTableDecoraciones.setModel(modeloDecoraciones);
+        this.modeloDecoraciones=modeloDecoraciones;
+        ModeloTablaServicios modeloServicios=new ModeloTablaServicios();
+        jTableServicios.setModel(modeloServicios);
+        this.modeloServicios=modeloServicios;
     }
 
     /**
@@ -57,6 +81,7 @@ public class VGeneral extends javax.swing.JDialog {
         jButtonModificarEmpleado = new javax.swing.JButton();
         jButtonSalirEmpleados = new javax.swing.JButton();
         jButtonBorrarEmpleado = new javax.swing.JButton();
+        jButtonBuscarEmpleados = new javax.swing.JButton();
         jPanelRecetas = new javax.swing.JPanel();
         jLabelNombreRecetas = new javax.swing.JLabel();
         jLabelOrdenarPorRecetas = new javax.swing.JLabel();
@@ -115,6 +140,7 @@ public class VGeneral extends javax.swing.JDialog {
         jButtonSalirServicio = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Gestión general");
 
         jLabelDNI.setText("DNI:");
 
@@ -124,28 +150,45 @@ public class VGeneral extends javax.swing.JDialog {
 
         jLabelOrdenarPor.setText("Ordenar por:");
 
-        jComboBoxOrdenarPorEmpleados.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBoxOrdenarPorEmpleados.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Orden alfabético (ascendente)", "Orden alfabético (descendente)" }));
 
-        jTableEmpleados.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
+        jTableEmpleados.setModel(new ModeloTablaEmpleados());
         jScrollPaneEmpleados.setViewportView(jTableEmpleados);
 
         jButtonAnhadirEmpleado.setText("Añadir");
+        jButtonAnhadirEmpleado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAnhadirEmpleadoActionPerformed(evt);
+            }
+        });
 
         jButtonModificarEmpleado.setText("Modificar");
+        jButtonModificarEmpleado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonModificarEmpleadoActionPerformed(evt);
+            }
+        });
 
         jButtonSalirEmpleados.setText("Salir");
+        jButtonSalirEmpleados.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSalirEmpleadosActionPerformed(evt);
+            }
+        });
 
         jButtonBorrarEmpleado.setText("Borrar");
+        jButtonBorrarEmpleado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonBorrarEmpleadoActionPerformed(evt);
+            }
+        });
+
+        jButtonBuscarEmpleados.setText("Buscar");
+        jButtonBuscarEmpleados.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonBuscarEmpleadosActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanelEmpleadosLayout = new javax.swing.GroupLayout(jPanelEmpleados);
         jPanelEmpleados.setLayout(jPanelEmpleadosLayout);
@@ -169,12 +212,14 @@ public class VGeneral extends javax.swing.JDialog {
                         .addGroup(jPanelEmpleadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanelEmpleadosLayout.createSequentialGroup()
                                 .addComponent(jLabelNombreEmpleados)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jTextFieldNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 332, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(37, 37, 37)
+                                .addComponent(jTextFieldNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanelEmpleadosLayout.createSequentialGroup()
                                 .addComponent(jLabelOrdenarPor)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jComboBoxOrdenarPorEmpleados, javax.swing.GroupLayout.PREFERRED_SIZE, 332, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(jComboBoxOrdenarPorEmpleados, 0, 1, Short.MAX_VALUE)))
+                        .addGap(26, 26, 26)
+                        .addComponent(jButtonBuscarEmpleados))
                     .addGroup(jPanelEmpleadosLayout.createSequentialGroup()
                         .addComponent(jButtonAnhadirEmpleado)
                         .addGap(161, 161, 161)
@@ -188,18 +233,23 @@ public class VGeneral extends javax.swing.JDialog {
         jPanelEmpleadosLayout.setVerticalGroup(
             jPanelEmpleadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelEmpleadosLayout.createSequentialGroup()
-                .addGap(17, 17, 17)
-                .addGroup(jPanelEmpleadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelDNI)
-                    .addComponent(jLabelNombreEmpleados)
-                    .addComponent(jTextFielddni, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextFieldNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanelEmpleadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelRol)
-                    .addComponent(jLabelOrdenarPor)
-                    .addComponent(jTextFieldRol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBoxOrdenarPorEmpleados, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanelEmpleadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanelEmpleadosLayout.createSequentialGroup()
+                        .addGap(17, 17, 17)
+                        .addGroup(jPanelEmpleadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabelDNI)
+                            .addComponent(jLabelNombreEmpleados)
+                            .addComponent(jTextFielddni, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextFieldNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanelEmpleadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabelRol)
+                            .addComponent(jLabelOrdenarPor)
+                            .addComponent(jTextFieldRol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jComboBoxOrdenarPorEmpleados, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanelEmpleadosLayout.createSequentialGroup()
+                        .addGap(37, 37, 37)
+                        .addComponent(jButtonBuscarEmpleados)))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPaneEmpleados, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -220,29 +270,44 @@ public class VGeneral extends javax.swing.JDialog {
         jLabelPrecio.setText("Precio:");
 
         jButtonBuscarRecetas.setText("Buscar");
-
-        jComboBoxOrdenarPorRecetas.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        jTableRecetas.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+        jButtonBuscarRecetas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonBuscarRecetasActionPerformed(evt);
             }
-        ));
+        });
+
+        jComboBoxOrdenarPorRecetas.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Orden alfabético (ascendente)", "Orden alfabético (descendente)", "Precio (ascendente)", "Precio (descendente)" }));
+
+        jTableRecetas.setModel(new ModeloTablaRecetas());
         jScrollPaneRecetas.setViewportView(jTableRecetas);
 
         jButtonAnhadirReceta.setText("Añadir");
+        jButtonAnhadirReceta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAnhadirRecetaActionPerformed(evt);
+            }
+        });
 
         jButtonSalirReceta.setText("Salir");
+        jButtonSalirReceta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSalirRecetaActionPerformed(evt);
+            }
+        });
 
         jButtonBorrarReceta.setText("Borrar");
+        jButtonBorrarReceta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonBorrarRecetaActionPerformed(evt);
+            }
+        });
 
         jButtonModificarReceta.setText("Modificar");
+        jButtonModificarReceta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonModificarRecetaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanelRecetasLayout = new javax.swing.GroupLayout(jPanelRecetas);
         jPanelRecetas.setLayout(jPanelRecetasLayout);
@@ -259,7 +324,7 @@ public class VGeneral extends javax.swing.JDialog {
                         .addGap(18, 18, 18)
                         .addGroup(jPanelRecetasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jTextFieldNombreRecetas)
-                            .addComponent(jComboBoxOrdenarPorRecetas, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jComboBoxOrdenarPorRecetas, 0, 310, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
                         .addComponent(jLabelPrecio)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -292,7 +357,7 @@ public class VGeneral extends javax.swing.JDialog {
                     .addComponent(jComboBoxOrdenarPorRecetas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPaneRecetas, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
                 .addGroup(jPanelRecetasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonAnhadirReceta)
                     .addComponent(jButtonSalirReceta)
@@ -304,6 +369,11 @@ public class VGeneral extends javax.swing.JDialog {
         jTabbedPaneEmRePrDeSe.addTab("Recetas", jPanelRecetas);
 
         jButtonModificarProducto.setText("Modificar");
+        jButtonModificarProducto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonModificarProductoActionPerformed(evt);
+            }
+        });
 
         jLabelNombreProductos.setText("Nombre:");
 
@@ -311,27 +381,37 @@ public class VGeneral extends javax.swing.JDialog {
 
         jLabelPrecioProductos.setText("Precio:");
 
-        jComboBoxOrdenarPorProductos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBoxOrdenarPorProductos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Orden alfabético (ascendente)", "Orden alfabético (descendente)", "Precio (ascendente)", "Precio (descendente)" }));
 
         jButtonBuscarProductos.setText("Buscar");
+        jButtonBuscarProductos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonBuscarProductosActionPerformed(evt);
+            }
+        });
 
         jButtonAnhadirProducto.setText("Añadir");
+        jButtonAnhadirProducto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAnhadirProductoActionPerformed(evt);
+            }
+        });
 
         jButtonBorrarProducto.setText("Borrar");
+        jButtonBorrarProducto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonBorrarProductoActionPerformed(evt);
+            }
+        });
 
         jButtonSalirProducto.setText("Salir");
-
-        jTableProductos.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+        jButtonSalirProducto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSalirProductoActionPerformed(evt);
             }
-        ));
+        });
+
+        jTableProductos.setModel(new ModeloTablaProductos());
         jScrollPaneProductos.setViewportView(jTableProductos);
 
         javax.swing.GroupLayout jPanelProductosLayout = new javax.swing.GroupLayout(jPanelProductos);
@@ -407,30 +487,45 @@ public class VGeneral extends javax.swing.JDialog {
 
         jLabelOrdenarPorDecoraciones.setText("Ordenar por:");
 
-        jComboBoxOrdenarPorDecoraciones.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBoxOrdenarPorDecoraciones.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Orden alfabético del modelo (ascendente)", "Orden alfabético del modelo (descendente)", "Id (ascendente)", "Id (descendente)" }));
 
-        jTableDecoraciones.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
+        jTableDecoraciones.setModel(new ModeloTablaDecoraciones());
         jScrollPaneDecoraciones.setViewportView(jTableDecoraciones);
 
         jButtonBuscarDecoraciones.setText("Buscar");
+        jButtonBuscarDecoraciones.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonBuscarDecoracionesActionPerformed(evt);
+            }
+        });
 
         jButtonAnhadirDecoracion.setText("Añadir");
+        jButtonAnhadirDecoracion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAnhadirDecoracionActionPerformed(evt);
+            }
+        });
 
         jButtonModificarDecoracion.setText("Modificar");
+        jButtonModificarDecoracion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonModificarDecoracionActionPerformed(evt);
+            }
+        });
 
         jButtonBorrarDecoracion.setText("Borrar");
+        jButtonBorrarDecoracion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonBorrarDecoracionActionPerformed(evt);
+            }
+        });
 
         jButtonSalirDecoracion.setText("Salir");
+        jButtonSalirDecoracion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSalirDecoracionActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanelDecoracionesLayout = new javax.swing.GroupLayout(jPanelDecoraciones);
         jPanelDecoraciones.setLayout(jPanelDecoracionesLayout);
@@ -506,30 +601,50 @@ public class VGeneral extends javax.swing.JDialog {
 
         jLabelOrdenarPorServicios.setText("Ordenar por:");
 
-        jComboBoxServicios.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBoxServicios.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Orden alfabético (ascendente)", "Orden alfabético (descendente)" }));
+        jComboBoxServicios.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxServiciosActionPerformed(evt);
+            }
+        });
 
         jButtonBuscarServicios.setText("Buscar");
-
-        jTableServicios.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+        jButtonBuscarServicios.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonBuscarServiciosActionPerformed(evt);
             }
-        ));
+        });
+
+        jTableServicios.setModel(new ModeloTablaServicios());
         jScrollPaneServicios.setViewportView(jTableServicios);
 
         jButtonAnhadirServicio.setText("Añadir");
+        jButtonAnhadirServicio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAnhadirServicioActionPerformed(evt);
+            }
+        });
 
         jButtonModificarServicio.setText("Modificar");
+        jButtonModificarServicio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonModificarServicioActionPerformed(evt);
+            }
+        });
 
         jButtonBorrarServicio.setText("Borrar");
+        jButtonBorrarServicio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonBorrarServicioActionPerformed(evt);
+            }
+        });
 
         jButtonSalirServicio.setText("Salir");
+        jButtonSalirServicio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSalirServicioActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanelServiciosLayout = new javax.swing.GroupLayout(jPanelServicios);
         jPanelServicios.setLayout(jPanelServiciosLayout);
@@ -599,6 +714,178 @@ public class VGeneral extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButtonBuscarRecetasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBuscarRecetasActionPerformed
+        // TODO add your handling code here:
+        try{
+            List<Receta> recetas=new ArrayList<Receta>();
+            if(jTextFieldPrecioRecetas.getText()!=""){
+                recetas=fa.buscarRecetas(jTextFieldNombreRecetas.getText(),Float.valueOf(jTextFieldPrecioRecetas.getText()),(String)jComboBoxOrdenarPorRecetas.getSelectedItem());
+            }
+            else{
+                recetas=fa.buscarRecetas(jTextFieldNombreRecetas.getText(),null,(String)jComboBoxOrdenarPorRecetas.getSelectedItem());
+            }
+            modeloRecetas.setFilas(recetas);
+        }
+        catch(Exception e){
+            fa.muestraExcepcion(e.getMessage());
+        }
+    }//GEN-LAST:event_jButtonBuscarRecetasActionPerformed
+
+    private void jButtonBorrarRecetaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBorrarRecetaActionPerformed
+        // TODO add your handling code here:
+        fa.borrarReceta(modeloRecetas.obteneReceta(jTableRecetas.getSelectedRow()));
+    }//GEN-LAST:event_jButtonBorrarRecetaActionPerformed
+
+    private void jButtonSalirRecetaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSalirRecetaActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_jButtonSalirRecetaActionPerformed
+
+    private void jButtonModificarEmpleadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonModificarEmpleadoActionPerformed
+        fgui.visualizarModificarEmpleado((JFrame)this.getParent(), modeloEmpleados.obtenerEmpleado(jTableEmpleados.getSelectedRow()));
+    }//GEN-LAST:event_jButtonModificarEmpleadoActionPerformed
+
+    private void jButtonModificarRecetaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonModificarRecetaActionPerformed
+        // TODO add your handling code here:
+        fgui.visualizarModificarReceta((JFrame)this.getParent(), modeloRecetas.obteneReceta(jTableRecetas.getSelectedRow()));
+    }//GEN-LAST:event_jButtonModificarRecetaActionPerformed
+
+    private void jButtonAnhadirRecetaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAnhadirRecetaActionPerformed
+        // TODO add your handling code here:
+        fgui.visualizarAnhadirReceta((JFrame)this.getParent());
+    }//GEN-LAST:event_jButtonAnhadirRecetaActionPerformed
+
+    private void jButtonBuscarEmpleadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBuscarEmpleadosActionPerformed
+        // TODO add your handling code here:
+        try{
+            List<Empleado> empleados=new ArrayList<Empleado>();
+            empleados=fa.buscarEmpleados(jTextFielddni.getText(),jTextFieldNombre.getText(),jTextFieldRol.getText(),(String)jComboBoxOrdenarPorEmpleados.getSelectedItem());
+            modeloEmpleados.setFilas(empleados);
+        }
+        catch(Exception e){
+            fa.muestraExcepcion(e.getMessage());
+        }
+    }//GEN-LAST:event_jButtonBuscarEmpleadosActionPerformed
+
+    private void jButtonSalirEmpleadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSalirEmpleadosActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_jButtonSalirEmpleadosActionPerformed
+
+    private void jButtonSalirProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSalirProductoActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_jButtonSalirProductoActionPerformed
+
+    private void jButtonSalirDecoracionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSalirDecoracionActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_jButtonSalirDecoracionActionPerformed
+
+    private void jButtonSalirServicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSalirServicioActionPerformed
+        VPrincipalE vc;
+        vc = new VPrincipalE(fa);
+        vc.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jButtonSalirServicioActionPerformed
+
+    private void jButtonBuscarProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBuscarProductosActionPerformed
+        // TODO add your handling code here:
+        try{
+            List<Producto> productos=new ArrayList<Producto>();
+            if(jTextFieldPrecioProductos.getText()!=""){
+                productos=fa.buscarProductos(jTextFieldNombreProductos.getText(),Float.valueOf(jTextFieldPrecioProductos.getText()),(String)jComboBoxOrdenarPorProductos.getSelectedItem());
+            }
+            else{
+                productos=fa.buscarProductos(jTextFieldNombreProductos.getText(),null,(String)jComboBoxOrdenarPorProductos.getSelectedItem());
+            }
+            modeloProductos.setFilas(productos);
+        }
+        catch(Exception e){
+            fa.muestraExcepcion(e.getMessage());
+        }
+    }//GEN-LAST:event_jButtonBuscarProductosActionPerformed
+
+    private void jButtonBuscarDecoracionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBuscarDecoracionesActionPerformed
+        // TODO add your handling code here:
+        try{
+            List<Decoracion> decoraciones=new ArrayList<Decoracion>();
+            decoraciones=fa.buscarDecoraciones(jTextFieldId.getText(),jTextFieldTipo.getText(),jTextFieldModelo.getText(),(String)jComboBoxOrdenarPorDecoraciones.getSelectedItem());
+            modeloDecoraciones.setFilas(decoraciones);
+        }
+        catch(Exception e){
+            fa.muestraExcepcion(e.getMessage());
+        }
+    }//GEN-LAST:event_jButtonBuscarDecoracionesActionPerformed
+
+    private void jButtonBuscarServiciosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBuscarServiciosActionPerformed
+        // TODO add your handling code here:
+        try{
+            List<Servicios> servicios=new ArrayList<>();
+            servicios=fa.buscarServicios(jTextFieldNombreServicios.getText(),(String)jComboBoxServicios.getSelectedItem());
+            modeloServicios.setFilas(servicios);
+        }
+        catch(Exception e){
+            fa.muestraExcepcion(e.getMessage());
+        }
+    }//GEN-LAST:event_jButtonBuscarServiciosActionPerformed
+
+    private void jButtonBorrarEmpleadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBorrarEmpleadoActionPerformed
+        // TODO add your handling code here:
+        fa.borrarEmpleado(modeloEmpleados.obtenerEmpleado(jTableEmpleados.getSelectedRow()));
+    }//GEN-LAST:event_jButtonBorrarEmpleadoActionPerformed
+
+    private void jButtonBorrarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBorrarProductoActionPerformed
+        // TODO add your handling code here:
+        fa.borrarProducto(modeloProductos.obtenerProducto(jTableProductos.getSelectedRow()));
+    }//GEN-LAST:event_jButtonBorrarProductoActionPerformed
+
+    private void jButtonBorrarDecoracionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBorrarDecoracionActionPerformed
+        // TODO add your handling code here:
+        fa.borrarDecoracion(modeloDecoraciones.obtenerDecoracion(jTableDecoraciones.getSelectedRow()));
+    }//GEN-LAST:event_jButtonBorrarDecoracionActionPerformed
+
+    private void jButtonBorrarServicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBorrarServicioActionPerformed
+        // TODO add your handling code here:
+        fa.borrarServicio(modeloServicios.obtenerServicio(jTableDecoraciones.getSelectedRow()));
+    }//GEN-LAST:event_jButtonBorrarServicioActionPerformed
+
+    private void jButtonAnhadirServicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAnhadirServicioActionPerformed
+        fgui.visualizarAnhadirServicios((JFrame)this.getParent());
+    }//GEN-LAST:event_jButtonAnhadirServicioActionPerformed
+
+    private void jComboBoxServiciosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxServiciosActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBoxServiciosActionPerformed
+
+    private void jButtonAnhadirEmpleadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAnhadirEmpleadoActionPerformed
+        fgui.visualizarAnhadirEmpleado((JFrame)this.getParent());
+    }//GEN-LAST:event_jButtonAnhadirEmpleadoActionPerformed
+
+    private void jButtonAnhadirProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAnhadirProductoActionPerformed
+        fgui.visualizarAnhadirProducto((JFrame)this.getParent());
+    }//GEN-LAST:event_jButtonAnhadirProductoActionPerformed
+
+    private void jButtonAnhadirDecoracionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAnhadirDecoracionActionPerformed
+        fgui.visualizarAnhadirDecoracion((JFrame)this.getParent());
+    }//GEN-LAST:event_jButtonAnhadirDecoracionActionPerformed
+
+    private void jButtonModificarServicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonModificarServicioActionPerformed
+        fgui.visualizarModificarServicios((JFrame)this.getParent(), modeloServicios.obtenerServicio(jTableServicios.getSelectedRow()));
+    }//GEN-LAST:event_jButtonModificarServicioActionPerformed
+
+    private void jButtonModificarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonModificarProductoActionPerformed
+        fgui.visualizarModificarProducto((JFrame)this.getParent(), modeloProductos.obtenerProducto(jTableProductos.getSelectedRow()));
+    }//GEN-LAST:event_jButtonModificarProductoActionPerformed
+
+    private void jButtonModificarDecoracionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonModificarDecoracionActionPerformed
+        fgui.visualizarModificarDecoracion((JFrame)this.getParent(), modeloDecoraciones.obtenerDecoracion(jTableDecoraciones.getSelectedRow()));
+    }//GEN-LAST:event_jButtonModificarDecoracionActionPerformed
+
+    /**
+     * @param args the command line arguments
+     */
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAnhadirDecoracion;
@@ -612,6 +899,7 @@ public class VGeneral extends javax.swing.JDialog {
     private javax.swing.JButton jButtonBorrarReceta;
     private javax.swing.JButton jButtonBorrarServicio;
     private javax.swing.JButton jButtonBuscarDecoraciones;
+    private javax.swing.JButton jButtonBuscarEmpleados;
     private javax.swing.JButton jButtonBuscarProductos;
     private javax.swing.JButton jButtonBuscarRecetas;
     private javax.swing.JButton jButtonBuscarServicios;

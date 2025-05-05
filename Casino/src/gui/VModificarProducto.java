@@ -4,32 +4,26 @@
  */
 package gui;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Toolkit;
+import aplicacion.FachadaAplicacion;
+import aplicacion.Producto;
 
 /**
  *
  * @author alumnogreibd
  */
 public class VModificarProducto extends javax.swing.JDialog {
+    
+    private FachadaAplicacion fa;
+    private Producto anterior;
 
     /**
      * Creates new form VAnhadirProducto
      */
-    public VModificarProducto(java.awt.Frame parent, boolean modal) {
+    public VModificarProducto(java.awt.Frame parent, boolean modal,FachadaAplicacion fa, Producto anterior) {
         super(parent, modal);
         initComponents();
-        centrarVentana();
-        getContentPane().setBackground(Color.WHITE);
-    }
-    
-    private void centrarVentana() {
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        Dimension frameSize = this.getSize();
-        int x = (screenSize.width - frameSize.width) / 2;
-        int y = (screenSize.height - frameSize.height) / 2;
-        this.setLocation(x, y);
+        this.fa=fa;
+        this.anterior=anterior;
     }
 
     /**
@@ -51,6 +45,7 @@ public class VModificarProducto extends javax.swing.JDialog {
         jTextFieldPrecio = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Modificar Productos");
 
         jLabelNombre.setText("Nombre:");
 
@@ -59,8 +54,20 @@ public class VModificarProducto extends javax.swing.JDialog {
         jLabelPrecio.setText("Precio:");
 
         jButtonAceptar.setText("Aceptar");
+        jButtonAceptar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAceptarActionPerformed(evt);
+            }
+        });
 
         jButtonCancelar.setText("Cancelar");
+        jButtonCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCancelarActionPerformed(evt);
+            }
+        });
+
+        jTextFieldNombre.setEditable(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -110,7 +117,20 @@ public class VModificarProducto extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-   
+    private void jButtonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_jButtonCancelarActionPerformed
+
+    private void jButtonAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAceptarActionPerformed
+        // TODO add your handling code here:
+        Producto nuevo=new Producto(anterior.getNombre(),Float.valueOf(jTextFieldStock.getText()),Float.valueOf(jTextFieldStock.getText()));
+        fa.modificarProducto(nuevo);
+        this.dispose();
+    }//GEN-LAST:event_jButtonAceptarActionPerformed
+
+    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAceptar;
     private javax.swing.JButton jButtonCancelar;

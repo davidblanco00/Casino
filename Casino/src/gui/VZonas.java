@@ -9,6 +9,7 @@ import aplicacion.Zonas;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.util.List;
 
 /**
  *
@@ -23,13 +24,21 @@ public class VZonas extends javax.swing.JFrame {
      * @param fa
      * @param zonas
      */
-    public VZonas(java.awt.Frame parent, boolean modal, FachadaAplicacion fa, java.util.List<Zonas> zonas) {
+    
+    private ModeloTablaZonas modelo;
+    private FachadaAplicacion fa;
+    
+    public VZonas(java.awt.Frame parent, boolean modal, FachadaAplicacion fa) {
         initComponents();
         getContentPane().setBackground(Color.WHITE);
         centrarVentana(); 
+        this.fa=fa;
         ModeloTablaZonas mTZonas = new ModeloTablaZonas();
         tablaZonas.setModel(mTZonas);
-        mTZonas.setFilas(zonas);
+        this.modelo=mTZonas;
+        List<Zonas> zonas=fa.buscarZonas();
+        List<Integer> empleados=fa.emparejarZonasEmpleados(zonas);
+        mTZonas.setFilas(zonas,empleados);
     }
     
     private void centrarVentana() {
@@ -53,15 +62,33 @@ public class VZonas extends javax.swing.JFrame {
         tablaZonas = new javax.swing.JTable();
         jButtonBorrar = new javax.swing.JButton();
         jButtonSalir = new javax.swing.JButton();
+        jButtonAnhadir = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         tablaZonas.setModel(new ModeloTablaZonas());
         jScrollPaneZonas.setViewportView(tablaZonas);
 
         jButtonBorrar.setText("Borrar");
+        jButtonBorrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonBorrarActionPerformed(evt);
+            }
+        });
 
         jButtonSalir.setText("Salir");
+        jButtonSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSalirActionPerformed(evt);
+            }
+        });
+
+        jButtonAnhadir.setText("Añadir");
+        jButtonAnhadir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAnhadirActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -74,6 +101,8 @@ public class VZonas extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jButtonBorrar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButtonAnhadir)
+                        .addGap(171, 171, 171)
                         .addComponent(jButtonSalir)))
                 .addContainerGap())
         );
@@ -85,15 +114,39 @@ public class VZonas extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonBorrar)
-                    .addComponent(jButtonSalir))
+                    .addComponent(jButtonSalir)
+                    .addComponent(jButtonAnhadir))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButtonSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSalirActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_jButtonSalirActionPerformed
+
+    private void jButtonBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBorrarActionPerformed
+        // TODO add your handling code here:
+        Zonas z=modelo.obtenerZona(tablaZonas.getSelectedRow());
+        fa.borrarZona(z);
+        ModeloTablaZonas mTZonas = new ModeloTablaZonas();
+        tablaZonas.setModel(mTZonas);
+        this.modelo=mTZonas;
+        List<Zonas> zonas=fa.buscarZonas();
+        List<Integer> empleados=fa.emparejarZonasEmpleados(zonas);
+        mTZonas.setFilas(zonas,empleados);
+    }//GEN-LAST:event_jButtonBorrarActionPerformed
+
+    private void jButtonAnhadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAnhadirActionPerformed
+        VAnhadirZona vz;
+        vz = new VAnhadirZona(this, true, fa);
+        vz.setVisible(true);
+    }//GEN-LAST:event_jButtonAnhadirActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonAnhadir;
     private javax.swing.JButton jButtonBorrar;
     private javax.swing.JButton jButtonSalir;
     private javax.swing.JScrollPane jScrollPaneZonas;

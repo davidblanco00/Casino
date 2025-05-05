@@ -5,9 +5,8 @@
 
 package aplicacion;
 
-import gui.VPrincipalU;
-import java.sql.Date;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -22,22 +21,13 @@ import java.util.ArrayList;
 public class FachadaAplicacion {
     gui.FachadaGui fgui;
     baseDatos.FachadaBaseDatos fbd;
-    GestionUsuarios cu;
     GestionEmpleados ce;
-    GestionFichas cf;
-    GestionJuegos cj;
-    GestionApuestas ca;
-    GestionMaquinas cm;
+    
     
  public FachadaAplicacion(){
    fgui=new gui.FachadaGui(this);
    fbd= new baseDatos.FachadaBaseDatos(this);
-   cu =new GestionUsuarios(fgui, fbd);
    ce =new GestionEmpleados(fgui, fbd);
-   cf =new GestionFichas(fgui, fbd);
-   cj=new GestionJuegos(fgui, fbd);
-   ca=new GestionApuestas(fgui, fbd);
-   cm=new GestionMaquinas(fgui, fbd);
  }
 
  public static void main(String args[]) {
@@ -51,160 +41,166 @@ public class FachadaAplicacion {
      fgui.iniciaVista();
  }
  
- public void iniciaFachadaUsuario(Usuario usuario){
-     fgui.iniciaFachadaUsuario(usuario);
+ public void iniciaFachadaEmpleado(){
+     fgui.iniciaFachadaEmpleado();
  }
 
  public void muestraExcepcion(String e){
      fgui.muestraExcepcion(e);
  }
  
- public Usuario validarUsuario(String nickname, String contrasenha){
-        return cu.validarUsuario(nickname, contrasenha);
- }
- 
- public void editarUsuario(String dni, String nickname, Float saldo, String contrasenha){
-    cu.editarUsuario(dni, nickname, saldo, contrasenha);
-}
  
  public Empleado validarAdministrador(String nombre, String contrasenha){
         return ce.validarAdministrador(nombre, contrasenha);
  }
- 
- public ArrayList<Ficha> buscarFichas(String color){
-        return cf.buscarFichas(color);
- }
- 
- public void editarFichas(String color, float precio, int total_sin_reservar){
-    cf.editarFichas(color, precio, total_sin_reservar);
-}
- 
- public void anhadirFichas(String color, float precio, int total_sin_reservar){
-    cf.editarFichas(color, precio, total_sin_reservar);
-}
- 
- public void borrarFichas(String color){
-    cf.borrarFichas(color);
-}
- 
- public ArrayList<FichasDeUsuario> buscarFichasDeUsuario(String dni){
-        return cf.buscarFichasDeUsuario(dni);
- }
- 
- public FichasDeUsuario buscarMasaDeFichas(String dni, String color){
-    return cf.buscarMasaDeFichas(dni, color);
-}
- 
- public void editarFichasDeUsuario(String dni, String color, int cantidad){
-    cf.editarFichasDeUsuario(dni, color, cantidad);
- }
- 
- public void anhadirFichasDeUsuario(String dni, String color, int cantidad){
-    cf.anhadirFichasDeUsuario(dni, color, cantidad);
-}
- 
- public void borrarFichasDeUsuario(String dni, String color){
-    cf.borrarFichasDeUsuario(dni, color);
-}
- 
- public ArrayList<Apuesta> buscarApuestas(int id){
-    return ca.buscarApuestas(id);
-}
- 
- public void editarApuestas(int id, float dinero, boolean resultado){
-    ca.editarApuestas(id, dinero, resultado);
-}
- 
- public void anhadirApuestas(int id, float dinero, boolean resultado){
-    ca.anhadirApuestas(id, dinero, resultado);
-}
- 
- public void borrarApuestas(int id){
-    ca.borrarApuestas(id);
-}
- 
- public ArrayList<Maquina> buscarMaquinas(int id){
-    return cm.buscarMaquinas(id);
-}
- 
- public void editarMaquinas(int id, String nombre, int anho_compra){
-    cm.editarMaquinas(id, nombre, anho_compra);
-}
- 
- public void anhadirMaquinas(int id, String nombre, int anho_compra){
-    cm.anhadirMaquinas(id, nombre, anho_compra);
-}
- 
- public void borrarMaquinas(int id){
-    cm.borrarMaquinas(id);
-}
- 
- public ArrayList<Parte> buscarPartes(int id, String nombre){
-    return cm.buscarPartes(id, nombre);
+
+
+public List<Zonas> buscarZonas(){
+    return fbd.buscarZonas();
 }
 
-public void editarPartes(int id, String nombre, String modelo, String productora, String estado){
-    cm.editarPartes(id, nombre, modelo, productora, estado);
+public List<Integer> emparejarZonasEmpleados(List<Zonas> zonas){
+    ArrayList<Integer> resultado=new ArrayList<Integer>();
+    for(Zonas z:zonas){
+        resultado.add(fbd.calcularEmpleadosZona(z));
+    }
+    return resultado;
 }
 
-public void anhadirPartes(int id, String nombre, String modelo, String productora, String estado){
-    cm.anhadirPartes(id, nombre, modelo, productora, estado);
+public void borrarZona(Zonas z){
+    fbd.borrarZona(z);
 }
 
-public void borrarPartes(int id, String nombre){
-    cm.borrarPartes(id, nombre);
+public List<Receta> buscarRecetas(String nombre,Float precio,String ordenarPor){
+    return fbd.buscarRecetas(nombre,precio,ordenarPor);
 }
 
-public ArrayList<Competitivo> buscarCompetitivos(int id){
-    return cj.buscarCompetitivos(id);
+public List<Producto> buscarProductos(String nombre,Float precio,String ordenarPor){
+    return fbd.buscarProductos(nombre,precio,ordenarPor);
 }
 
-public void editarCompetitivos(int id, String nombre, java.util.Date fecha_inicio, java.util.Date fecha_final, String tipo, int num_jugadores){
-    cj.editarCompetitivos(id, nombre, fecha_inicio, fecha_final, tipo, num_jugadores);
+public List<Decoracion> buscarDecoraciones(String id,String tipo,String modelo,String ordenarPor){
+    return fbd.buscarDecoraciones(id,tipo,modelo,ordenarPor);
 }
 
-public void anhadirCompetitivos(int id, String nombre, java.util.Date fecha_inicio, java.util.Date fecha_final, String tipo, int num_jugadores){
-    cj.anhadirCompetitivos(id, nombre, fecha_inicio, fecha_final, tipo, num_jugadores);
+public void borrarReceta(Receta r){
+    fbd.borrarReceta(r);
 }
 
-public void borrarCompetitivos(int id){
-    cj.borrarCompetitivos(id);
+public void borrarEmpleado(Empleado e){
+    fbd.borrarEmpleado(e);
 }
 
-public ArrayList<Mecanico> buscarMecanicos(int id){
-    return cj.buscarMecanicos(id);
+public void borrarProducto(Producto p){
+    fbd.borrarProducto(p);
 }
 
-public void editarMecanicos(int id, String nombre, java.util.Date fecha_inicio, java.util.Date fecha_final, String tipo, int id_maquina){
-    cj.editarMecanicos(id, nombre, fecha_inicio, fecha_final, tipo, id_maquina);
+public void borrarDecoracion(Decoracion d){
+    fbd.borrarDecoracion(d);
 }
 
-public void anhadirMecanicos(int id, String nombre, java.util.Date fecha_inicio, java.util.Date fecha_final, String tipo, int id_maquina){
-    cj.anhadirMecanicos(id, nombre, fecha_inicio, fecha_final, tipo, id_maquina);
+public void borrarServicio(Servicios s){
+    fbd.borrarServicio(s);
 }
 
-public void borrarMecanicos(int id){
-   cj.borrarMecanicos(id);
+public List<Bar> baresRecetaDisponible(Receta r){
+    return fbd.baresRecetaDisponible(r);
 }
 
-public ArrayList<Juego> totalJuegos(){
-   return cj.totalJuegos();
+public List<Zonas> zonasTrabaja(Empleado e){
+    return fbd.zonasTrabaja(e);
 }
 
-public ArrayList<TipoJuego> buscarTiposJuego(String tipo){
-    return cj.buscarTiposJuego(tipo);
+public List<Zonas> zonasDisponible(Servicios s){
+    return fbd.zonasDisponible(s);
 }
 
-public void editarTiposJuego(String tipo, String reglas_basicas){
-    cj.editarTiposJuego(tipo, reglas_basicas);
+public List<Bar> baresRecetaNoDisponible(Receta r){
+    return fbd.baresRecetaNoDisponible(r);
 }
 
-public void anhadirTiposJuego(String tipo, String reglas_basicas){
-    cj.anhadirTiposJuego(tipo, reglas_basicas);
+public List<Zonas> zonasNoTrabaja(Empleado e){
+    return fbd.zonasNoTrabaja(e);
 }
 
-public void borrarTiposJuego(String tipo){
-    cj.borrarTiposJuego(tipo);
+public List<Zonas> zonasNoDisponible(Servicios s){
+    return fbd.zonasNoDisponible(s);
+}
+
+public List<Bar> todosLosBares(){
+    return fbd.todosLosBares();
+}
+
+public List<Producto> todosLosProductos(){
+    return fbd.todosLosProductos();
+}
+
+public List<Float> emparejarCantidadesProductos(Receta r,List<Producto> productos){
+    List<Float> resultado=new ArrayList<Float>();
+    for(Producto p:productos){
+        resultado.add(fbd.cantidadReceta(r,p));
+    }
+    return resultado;
+}
+
+public void modificarReceta(Receta receta,List<Bar> bares,List<Producto> productos,List<Float> cantidades){
+    fbd.modificarReceta(receta,bares,productos,cantidades);
+}
+
+public void anhadirReceta(Receta receta,List<Bar> bares,List<Producto> productos,List<Float> cantidades){
+    fbd.anhadirReceta(receta,bares,productos,cantidades);
+}
+
+public List<Empleado> buscarEmpleados(String dni, String nombre, String rol, String ordenarPor){
+    return fbd.buscarEmpleados(dni,nombre,rol,ordenarPor);
+}
+
+public List<Servicios> buscarServicios(String nombre, String ordenarPor){
+    return fbd.buscarServicios(nombre,ordenarPor);
+}
+
+public void modificarEmpleado(Empleado em,List<Zonas> trabaja){
+    fbd.modificarEmpleado(em,trabaja);
+}
+
+public void anhadirEmpleado(Empleado em,List<Zonas> trabaja){
+    fbd.anhadirEmpleado(em,trabaja);
+}
+
+public List<Zonas> todasLasZonas(){
+    return fbd.todasLasZonas();
+}
+
+public void modificarServicio(Servicios s, List<Zonas> disponible){
+    fbd.modificarServicio(s,disponible);
+}
+
+public void anhadirServicio(Servicios s, List<Zonas> disponible){
+    fbd.anhadirServicio(s,disponible);
+}
+
+public void modificarDecoracion(Decoracion d, String zona){
+    fbd.modificarDecoracion(d,zona);
+}
+
+public void anhadirDecoracion(Decoracion d, String zona){
+    fbd.anhadirDecoracion(d,zona);
+}
+
+public void modificarProducto(Producto p){
+    fbd.modificarProducto(p);
+}
+
+public void anhadirProducto(Producto p){
+    fbd.anhadirProducto(p);
+}
+
+public void anhadirBar(Bar b){
+    fbd.anhadirBar(b);
+}
+
+public void anhadirZona(Zonas z){
+    fbd.anhadirZona(z);
 }
 
 }

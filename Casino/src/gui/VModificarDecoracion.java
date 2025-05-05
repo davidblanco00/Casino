@@ -4,32 +4,26 @@
  */
 package gui;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Toolkit;
+import aplicacion.Decoracion;
+import aplicacion.FachadaAplicacion;
 
 /**
  *
  * @author alumnogreibd
  */
 public class VModificarDecoracion extends javax.swing.JDialog {
+    
+    private FachadaAplicacion fa;
+    private Decoracion anterior;
 
     /**
      * Creates new form VAnhadirProducto
      */
-    public VModificarDecoracion(java.awt.Frame parent, boolean modal) {
+    public VModificarDecoracion(java.awt.Frame parent, boolean modal,FachadaAplicacion fa,Decoracion anterior) {
         super(parent, modal);
         initComponents();
-        centrarVentana();
-        getContentPane().setBackground(Color.WHITE);
-    }
-    
-    private void centrarVentana() {
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        Dimension frameSize = this.getSize();
-        int x = (screenSize.width - frameSize.width) / 2;
-        int y = (screenSize.height - frameSize.height) / 2;
-        this.setLocation(x, y);
+        this.fa=fa;
+        this.anterior=anterior;
     }
 
     /**
@@ -53,6 +47,7 @@ public class VModificarDecoracion extends javax.swing.JDialog {
         jTextFieldZona = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Modificar Decoracion");
 
         jLabelTipo.setText("Tipo:");
 
@@ -61,8 +56,18 @@ public class VModificarDecoracion extends javax.swing.JDialog {
         jLabelEstado.setText("Estado:");
 
         jButtonAceptar.setText("Aceptar");
+        jButtonAceptar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAceptarActionPerformed(evt);
+            }
+        });
 
         jButtonCancelar.setText("Cancelar");
+        jButtonCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCancelarActionPerformed(evt);
+            }
+        });
 
         jLabelZona.setText("Zona:");
 
@@ -120,7 +125,19 @@ public class VModificarDecoracion extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
- 
+    private void jButtonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_jButtonCancelarActionPerformed
+
+    private void jButtonAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAceptarActionPerformed
+        // TODO add your handling code here:
+        Decoracion nuevo=new Decoracion(anterior.getId(),jTextFieldTipo.getText(),jTextFieldModelo.getText(),jTextFieldEstado.getText());
+        fa.modificarDecoracion(nuevo,jTextFieldZona.getText());
+        this.dispose();
+    }//GEN-LAST:event_jButtonAceptarActionPerformed
+
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAceptar;

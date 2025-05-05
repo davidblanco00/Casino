@@ -19,6 +19,5 @@ public class Zonas {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-    
-    
+       
 }
