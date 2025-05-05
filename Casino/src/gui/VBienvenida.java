@@ -1,12 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
+
 package gui;
 
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.awt.event.KeyEvent;
 
 /**
  *
@@ -15,6 +13,7 @@ import java.awt.Toolkit;
 public class VBienvenida extends javax.swing.JFrame {
     
     aplicacion.FachadaAplicacion fa;
+    VPrincipalE vp;
 
     /**
      * Creates new form VPrincipalU
@@ -24,6 +23,13 @@ public class VBienvenida extends javax.swing.JFrame {
         initComponents();
         centrarVentana();
         getContentPane().setBackground(Color.WHITE);
+        
+        addKeyListener(new java.awt.event.KeyAdapter() {
+            @Override
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                enterKeyPressed(evt);
+                }
+        });
     }
     
     private void centrarVentana() {
@@ -58,13 +64,29 @@ public class VBienvenida extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("sansserif", 0, 24)); // NOI18N
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/fondo.png"))); // NOI18N
+        jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel1MouseClicked(evt);
+            }
+        });
         getContentPane().add(jLabel1);
-        jLabel1.setBounds(0, 0, 533, 435);
+        jLabel1.setBounds(0, 0, 533, 450);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
+        vp = new VPrincipalE(fa);
+        vp.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jLabel1MouseClicked
 
+
+    private void enterKeyPressed(java.awt.event.KeyEvent evt) {                                       
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            jLabel1MouseClicked(null); // Llama al método btnAceptarActionPerformed al presionar Enter
+        }
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

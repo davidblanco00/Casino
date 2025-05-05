@@ -1,7 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 
 package gui;
 
@@ -10,7 +7,7 @@ import aplicacion.Bar;
 
 /**
  *
- * @author basesdatos
+ * @author david
  */
 public class ModeloListaBares extends javax.swing.AbstractListModel {
     java.util.List<Bar> elementos;

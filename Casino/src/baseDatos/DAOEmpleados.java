@@ -1,7 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 
 package baseDatos;
 
@@ -16,7 +13,7 @@ import java.util.List;
 
 /**
  *
- * @author basesdatos
+ * @author david
  */
 public class DAOEmpleados extends AbstractDAO{
    

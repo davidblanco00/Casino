@@ -1,7 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package gui;
 
 import aplicacion.Decoracion;
@@ -15,7 +12,7 @@ import javax.swing.JFrame;
 
 /**
  *
- * @author alumno
+ * @author david
  */
 public class FachadaGui {
     aplicacion.FachadaAplicacion fa;

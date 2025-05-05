@@ -1,7 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 
 package baseDatos;
 
@@ -21,7 +18,7 @@ import aplicacion.Zonas;
 
 /**
  *
- * @author basesdatos
+ * @author david
  */
 public class FachadaBaseDatos {
     private aplicacion.FachadaAplicacion fa;

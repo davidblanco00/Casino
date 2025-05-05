@@ -1,13 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 
-/*
- * VAutentificacion.java
- *
- * Created on 16-feb-2011, 17:52:08
- */
 
 package gui;
 
@@ -15,7 +6,7 @@ import aplicacion.Empleado;
 
 /**
  *
- * @author basesdatos
+ * @author davi8d
  */
 public class VAutentificacion extends javax.swing.JDialog {
 

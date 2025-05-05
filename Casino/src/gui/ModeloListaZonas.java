@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 
 package gui;
 
@@ -10,7 +6,7 @@ import aplicacion.Zonas;
 
 /**
  *
- * @author basesdatos
+ * @author david
  */
 public class ModeloListaZonas extends javax.swing.AbstractListModel {
     java.util.List<Zonas> elementos;
