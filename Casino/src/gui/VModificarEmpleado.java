@@ -42,6 +42,7 @@ public class VModificarEmpleado extends javax.swing.JDialog {
         modeloTrabaja.setElementos(trabaja);
         List<Zonas> noTrabaja=fa.zonasNoTrabaja(anterior);
         modeloNoTrabaja.setElementos(noTrabaja);
+        
         if (modeloTrabaja.getSize()==0) jButtonFlechaD.setEnabled(false);
         else jButtonFlechaD.setEnabled(true);
         if (modeloNoTrabaja.getSize()==0) jButtonFlechaI.setEnabled(false);
@@ -231,7 +232,7 @@ public class VModificarEmpleado extends javax.swing.JDialog {
 
     private void jButtonFlechaDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFlechaDActionPerformed
         // TODO add your handling code here:
-        modeloNoTrabaja.nuevoElemento(modeloNoTrabaja.obtenerZona(jListNoTrabajaEn.getSelectedIndex()));
+        modeloNoTrabaja.nuevoElemento(modeloTrabaja.obtenerZona(jListNoTrabajaEn.getSelectedIndex()));
         modeloTrabaja.borrarElemento(jListTrabajaEn.getSelectedIndex());
         if (modeloTrabaja.getSize()==0) jButtonFlechaD.setEnabled(false);
         else jListTrabajaEn.setSelectedIndex(0);
@@ -241,7 +242,7 @@ public class VModificarEmpleado extends javax.swing.JDialog {
 
     private void jButtonFlechaIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFlechaIActionPerformed
         // TODO add your handling code here:
-        modeloTrabaja.nuevoElemento(modeloTrabaja.obtenerZona(jListTrabajaEn.getSelectedIndex()));
+        modeloTrabaja.nuevoElemento(modeloNoTrabaja.obtenerZona(jListTrabajaEn.getSelectedIndex()));
         modeloNoTrabaja.borrarElemento(jListNoTrabajaEn.getSelectedIndex());
         if (modeloNoTrabaja.getSize()==0) jButtonFlechaI.setEnabled(false);
         else jListNoTrabajaEn.setSelectedIndex(0);
