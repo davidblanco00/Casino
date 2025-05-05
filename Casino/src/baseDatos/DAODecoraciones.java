@@ -79,7 +79,7 @@ public class DAODecoraciones extends AbstractDAO {
         con=super.getConexion();
 
         try {
-        stmDecoracion=con.prepareStatement("delete from Productos where id = ?");
+        stmDecoracion=con.prepareStatement("delete from Decoracion where id = ?");
         stmDecoracion.setInt(1, d.getId());
         stmDecoracion.executeUpdate();
 

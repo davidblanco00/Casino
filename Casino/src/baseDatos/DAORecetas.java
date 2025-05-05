@@ -356,7 +356,7 @@ public class DAORecetas extends AbstractDAO {
         con=super.getConexion();
 
         try {
-        stmReceta=con.prepareStatement("insert intp Receta(precio_venta,nombre) "+
+        stmReceta=con.prepareStatement("insert into Receta(precio_venta,nombre) "+
                                     "values(?,?) ");
         stmReceta.setFloat(1, receta.getPrecio_venta());
         stmReceta.setString(2, receta.getNombre());
