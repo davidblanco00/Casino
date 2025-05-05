@@ -231,7 +231,7 @@ public class VModificarReceta extends javax.swing.JDialog {
 
     private void jButtonFlechaDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFlechaDActionPerformed
         // TODO add your handling code here:
-        modeloNoDisponible.nuevoElemento(modeloNoDisponible.obtenerBar(jListNoDisponibleEn.getSelectedIndex()));
+        modeloNoDisponible.nuevoElemento(modeloDisponible.obtenerBar(jListNoDisponibleEn.getSelectedIndex()));
         modeloDisponible.borrarElemento(jListDisponibleEn.getSelectedIndex());
         if (modeloDisponible.getSize()==0) jButtonFlechaD.setEnabled(false);
         else jListDisponibleEn.setSelectedIndex(0);
@@ -241,7 +241,7 @@ public class VModificarReceta extends javax.swing.JDialog {
 
     private void jButtonFlechaIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFlechaIActionPerformed
         // TODO add your handling code here:
-        modeloDisponible.nuevoElemento(modeloDisponible.obtenerBar(jListDisponibleEn.getSelectedIndex()));
+        modeloDisponible.nuevoElemento(modeloNoDisponible.obtenerBar(jListNoDisponibleEn.getSelectedIndex()));
         modeloNoDisponible.borrarElemento(jListNoDisponibleEn.getSelectedIndex());
         if (modeloNoDisponible.getSize()==0) jButtonFlechaI.setEnabled(false);
         else jListNoDisponibleEn.setSelectedIndex(0);

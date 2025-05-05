@@ -106,6 +106,18 @@ public class DAOEmpleados extends AbstractDAO{
         con=super.getConexion();
 
         try {
+        stmEmpleado=con.prepareStatement("delete from zonas_empleados where empleado = ?");
+        stmEmpleado.setString(1, em.getDni());
+        stmEmpleado.executeUpdate();
+
+        } catch (SQLException e){
+          System.out.println(e.getMessage());
+          this.getFachadaAplicacion().muestraExcepcion(e.getMessage());
+        }finally{
+          try {stmEmpleado.close();} catch (SQLException e){System.out.println("Imposible cerrar cursores");}
+        }
+        
+        try {
         stmEmpleado=con.prepareStatement("delete from Empleados where dni = ?");
         stmEmpleado.setString(1, em.getDni());
         stmEmpleado.executeUpdate();
@@ -282,6 +294,7 @@ public class DAOEmpleados extends AbstractDAO{
                                         "values(?,?) ");
                 stmEmpleado.setString(1, trabaja.get(i).getNombre());
                 stmEmpleado.setString(2, em.getDni());
+                stmEmpleado.executeUpdate();
             }catch (SQLException e){
                 System.out.println(e.getMessage());
                 this.getFachadaAplicacion().muestraExcepcion(e.getMessage());

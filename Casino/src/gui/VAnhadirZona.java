@@ -21,6 +21,7 @@ public class VAnhadirZona extends javax.swing.JDialog {
      */
     public VAnhadirZona(java.awt.Frame parent, boolean modal,FachadaAplicacion fa) {
         super(parent, modal);
+        this.fa=fa;
         initComponents();
         centrarVentana();
         getContentPane().setBackground(Color.WHITE);
@@ -131,6 +132,7 @@ public class VAnhadirZona extends javax.swing.JDialog {
             Zonas nuevo = new Zonas(jTextFieldNombre.getText());
             fa.anhadirZona(nuevo);
         }
+        this.dispose();
     }//GEN-LAST:event_jButtonAceptarActionPerformed
 
     

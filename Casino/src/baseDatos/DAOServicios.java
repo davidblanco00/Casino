@@ -67,6 +67,18 @@ public class DAOServicios extends AbstractDAO{
         PreparedStatement stmServicio=null;
 
         con=super.getConexion();
+        
+        try {
+        stmServicio=con.prepareStatement("delete from zonas_servicios where servicio = ?");
+        stmServicio.setString(1, s.getNombre());
+        stmServicio.executeUpdate();
+
+        } catch (SQLException e){
+          System.out.println(e.getMessage());
+          this.getFachadaAplicacion().muestraExcepcion(e.getMessage());
+        }finally{
+          try {stmServicio.close();} catch (SQLException e){System.out.println("Imposible cerrar cursores");}
+        }
 
         try {
         stmServicio=con.prepareStatement("delete from Servicios where nombre = ?");
@@ -237,6 +249,7 @@ public class DAOServicios extends AbstractDAO{
                                         "values(?,?) ");
                 stmEmpleado.setString(1, disponible.get(i).getNombre());
                 stmEmpleado.setString(2, s.getNombre());
+                stmEmpleado.executeUpdate();
             }catch (SQLException e){
                 System.out.println(e.getMessage());
                 this.getFachadaAplicacion().muestraExcepcion(e.getMessage());

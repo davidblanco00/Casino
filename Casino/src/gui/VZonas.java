@@ -3,6 +3,7 @@ package gui;
 
 import aplicacion.FachadaAplicacion;
 import aplicacion.Zonas;
+import gui.FachadaGui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -22,14 +23,16 @@ public class VZonas extends javax.swing.JFrame {
      * @param zonas
      */
     
+    private FachadaGui fgui;
     private ModeloTablaZonas modelo;
     private FachadaAplicacion fa;
     
-    public VZonas(java.awt.Frame parent, boolean modal, FachadaAplicacion fa) {
+    public VZonas(java.awt.Frame parent, boolean modal, FachadaAplicacion fa,FachadaGui fgui) {
         initComponents();
         getContentPane().setBackground(Color.WHITE);
         centrarVentana(); 
         this.fa=fa;
+        this.fgui=fgui;
         ModeloTablaZonas mTZonas = new ModeloTablaZonas();
         tablaZonas.setModel(mTZonas);
         this.modelo=mTZonas;
@@ -60,6 +63,7 @@ public class VZonas extends javax.swing.JFrame {
         jButtonBorrar = new javax.swing.JButton();
         jButtonSalir = new javax.swing.JButton();
         jButtonAnhadir = new javax.swing.JButton();
+        jButtonActualizar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -87,6 +91,13 @@ public class VZonas extends javax.swing.JFrame {
             }
         });
 
+        jButtonActualizar.setText("Actualizar");
+        jButtonActualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonActualizarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -97,9 +108,11 @@ public class VZonas extends javax.swing.JFrame {
                     .addComponent(jScrollPaneZonas, javax.swing.GroupLayout.DEFAULT_SIZE, 594, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jButtonBorrar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(104, 104, 104)
                         .addComponent(jButtonAnhadir)
-                        .addGap(171, 171, 171)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButtonActualizar)
+                        .addGap(72, 72, 72)
                         .addComponent(jButtonSalir)))
                 .addContainerGap())
         );
@@ -112,7 +125,8 @@ public class VZonas extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonBorrar)
                     .addComponent(jButtonSalir)
-                    .addComponent(jButtonAnhadir))
+                    .addComponent(jButtonAnhadir)
+                    .addComponent(jButtonActualizar))
                 .addContainerGap())
         );
 
@@ -120,7 +134,10 @@ public class VZonas extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSalirActionPerformed
-        System.exit(0);
+        VPrincipalE vpe;
+        vpe = new VPrincipalE(fa, fgui);
+        vpe.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_jButtonSalirActionPerformed
 
     private void jButtonBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBorrarActionPerformed
@@ -141,8 +158,18 @@ public class VZonas extends javax.swing.JFrame {
         vz.setVisible(true);
     }//GEN-LAST:event_jButtonAnhadirActionPerformed
 
+    private void jButtonActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonActualizarActionPerformed
+        ModeloTablaZonas mTZonas = new ModeloTablaZonas();
+        tablaZonas.setModel(mTZonas);
+        this.modelo=mTZonas;
+        List<Zonas> zonas=fa.buscarZonas();
+        List<Integer> empleados=fa.emparejarZonasEmpleados(zonas);
+        mTZonas.setFilas(zonas,empleados);
+    }//GEN-LAST:event_jButtonActualizarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonActualizar;
     private javax.swing.JButton jButtonAnhadir;
     private javax.swing.JButton jButtonBorrar;
     private javax.swing.JButton jButtonSalir;

@@ -30,6 +30,7 @@ public class VModificarEmpleado extends javax.swing.JDialog {
      */
     public VModificarEmpleado(java.awt.Frame parent, boolean modal,FachadaAplicacion fa, Empleado anterior) {
         super(parent, modal);
+        this.fa=fa;
         initComponents();
         getContentPane().setBackground(Color.WHITE);
         centrarVentana(); 
@@ -242,7 +243,7 @@ public class VModificarEmpleado extends javax.swing.JDialog {
 
     private void jButtonFlechaIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFlechaIActionPerformed
         // TODO add your handling code here:
-        modeloTrabaja.nuevoElemento(modeloNoTrabaja.obtenerZona(jListTrabajaEn.getSelectedIndex()));
+        modeloTrabaja.nuevoElemento(modeloNoTrabaja.obtenerZona(jListNoTrabajaEn.getSelectedIndex()));
         modeloNoTrabaja.borrarElemento(jListNoTrabajaEn.getSelectedIndex());
         if (modeloNoTrabaja.getSize()==0) jButtonFlechaI.setEnabled(false);
         else jListNoTrabajaEn.setSelectedIndex(0);

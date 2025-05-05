@@ -100,7 +100,7 @@ public class VPrincipalE extends javax.swing.JFrame {
 
     private void zonasButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_zonasButtonActionPerformed
         VZonas vc;
-        vc = new VZonas(this, true, fa);
+        vc = new VZonas(this, true, fa, fgui);
         vc.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_zonasButtonActionPerformed

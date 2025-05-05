@@ -236,7 +236,6 @@ public class VAnhadirEmpleado extends javax.swing.JDialog {
 
     private void jButtonFlechaIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFlechaIActionPerformed
         // TODO add your handling code here:
-        System.out.println(jListNoTrabajaEn.getSelectedIndex());
         modeloTrabaja.nuevoElemento(modeloNoTrabaja.obtenerZona(jListNoTrabajaEn.getSelectedIndex()));
         modeloNoTrabaja.borrarElemento(jListNoTrabajaEn.getSelectedIndex());
         if (modeloNoTrabaja.getSize()==0) jButtonFlechaI.setEnabled(false);

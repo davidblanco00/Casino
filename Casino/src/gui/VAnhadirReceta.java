@@ -20,7 +20,6 @@ import java.util.Set;
 public class VAnhadirReceta extends javax.swing.JDialog {
     
     private FachadaAplicacion fa;
-    private Receta anterior;
     private ModeloListaBares modeloDisponible;
     private ModeloListaBares modeloNoDisponible;
     private ModeloTablaProductosReceta modeloProductos;
@@ -34,7 +33,6 @@ public class VAnhadirReceta extends javax.swing.JDialog {
         getContentPane().setBackground(Color.WHITE);
         centrarVentana(); 
         this.fa=fa;
-        this.anterior=anterior;
         this.modeloDisponible=new ModeloListaBares();
         this.modeloNoDisponible=new ModeloListaBares();
         this.modeloProductos=new ModeloTablaProductosReceta();
@@ -227,14 +225,14 @@ public class VAnhadirReceta extends javax.swing.JDialog {
 
     private void jButtonAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAceptarActionPerformed
         // TODO add your handling code here:
-        Receta nueva=new Receta(anterior.getNombre(),Float.valueOf(jTextFieldPrecio.getText()).floatValue());
+        Receta nueva=new Receta(jTextFieldNombre.getText(),Float.valueOf(jTextFieldPrecio.getText()));
         fa.anhadirReceta(nueva,modeloDisponible.getElementos(),modeloProductos.getProductos(),modeloProductos.getCantidades());
         this.dispose();
     }//GEN-LAST:event_jButtonAceptarActionPerformed
 
     private void jButtonFlechaDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFlechaDActionPerformed
         // TODO add your handling code here:
-        modeloNoDisponible.nuevoElemento(modeloNoDisponible.obtenerBar(jListNoDisponibleEn.getSelectedIndex()));
+        modeloNoDisponible.nuevoElemento(modeloDisponible.obtenerBar(jListNoDisponibleEn.getSelectedIndex()));
         modeloDisponible.borrarElemento(jListDisponibleEn.getSelectedIndex());
         if (modeloDisponible.getSize()==0) jButtonFlechaD.setEnabled(false);
         else jListDisponibleEn.setSelectedIndex(0);
@@ -244,7 +242,7 @@ public class VAnhadirReceta extends javax.swing.JDialog {
 
     private void jButtonFlechaIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFlechaIActionPerformed
         // TODO add your handling code here:
-        modeloDisponible.nuevoElemento(modeloDisponible.obtenerBar(jListDisponibleEn.getSelectedIndex()));
+        modeloDisponible.nuevoElemento(modeloNoDisponible.obtenerBar(jListNoDisponibleEn.getSelectedIndex()));
         modeloNoDisponible.borrarElemento(jListNoDisponibleEn.getSelectedIndex());
         if (modeloNoDisponible.getSize()==0) jButtonFlechaI.setEnabled(false);
         else jListNoDisponibleEn.setSelectedIndex(0);
